@@ -7,7 +7,28 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
-body{background:#0b1220;color:#fff;}
+
+body{
+  background:#0b1220;
+  color:#fff;
+  position:relative;
+}
+
+/* BG */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("BG/BG1.jpe") center/cover no-repeat;
+  filter:blur(8px);
+  opacity:0.3;
+  z-index:0;
+}
+
+header,.container{
+  position:relative;
+  z-index:1;
+}
 
 header{
   background:#0a0f1a;
@@ -32,7 +53,6 @@ header{
   cursor:pointer;
 }
 
-/* MAIN */
 .container{
   max-width:1000px;
   margin:auto;
@@ -42,16 +62,15 @@ header{
 .title{
   font-size:20px;
   margin-bottom:20px;
+  text-align:center;
 }
 
-/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:16px;
 }
 
-/* CARD */
 .card{
   background:#111a2e;
   border-radius:12px;
@@ -135,8 +154,18 @@ header{
   color:#9ca3af;
 }
 
-.btn{
+/* TIMER */
+.timer{
   margin-top:10px;
+  font-size:14px;
+  color:#ff3b3b;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:12px;
   padding:10px 20px;
   background:#4ea1ff;
   border:none;
@@ -168,36 +197,37 @@ header{
 
 <div class="grid">
 
-<!-- RDR2 -->
 <div class="card">
 <img src="GLOGO/25.jpg">
 <div class="card-content">
 <h3>Red Dead Redemption 2</h3>
-<p>Open-world western adventure with deep story, realism, and immersive gameplay.</p>
+<p>Massive open-world western adventure with deep storytelling.</p>
 </div>
 </div>
 
-<!-- Ghost -->
 <div class="card">
 <img src="GLOGO/40.jpg">
 <div class="card-content">
 <h3>Ghost of Tsushima</h3>
-<p>Samurai action adventure with stunning visuals and intense sword combat.</p>
+<p>Samurai open-world action with stunning visuals and combat.</p>
 </div>
 </div>
 
 </div>
 
-<!-- BUY -->
 <div class="buy-box">
 
 <div class="price-row">
-  <span class="old-price">₹799</span>
+  <span class="old-price">₹699</span>
   <span class="main-price">₹299</span>
-  <span class="discount">63% OFF</span>
+  <span class="discount">57% OFF</span>
 </div>
 
-<div class="save-text">You save ₹500 on this bundle</div>
+<div class="save-text">You save ₹400 on this bundle</div>
+
+<div class="timer" id="timer">
+Offer ends in: 22Hrs : 00mins : 00sec
+</div>
 
 <button class="btn" onclick="buyDeal()">Buy Now</button>
 
@@ -207,14 +237,31 @@ header{
 
 <script>
 
-// 🔥 FIXED BUNDLE DATA
+let totalSeconds = 18 * 60 * 60;
+
+function updateTimer(){
+  let hrs = Math.floor(totalSeconds / 3600);
+  let mins = Math.floor((totalSeconds % 3600) / 60);
+  let secs = totalSeconds % 60;
+
+  document.getElementById("timer").innerText =
+    `Offer ends in: ${hrs}Hrs : ${mins}mins : ${secs}sec`;
+
+  if(totalSeconds > 0){
+    totalSeconds--;
+  }
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
 function buyDeal(){
   localStorage.setItem("order", JSON.stringify({
     name: "Welcome May Pack",
     price: 299,
-    base: 799,
-    disc: 63,
-    images: ["GLOGO/25.jpg","GLOGO/40.jpg"] // ✅ FIXED
+    base: 699,
+    disc: 57,
+    images: ["GLOGO/25.jpg","GLOGO/40.jpg"]
   }));
 
   window.location.href = "payment3.html";
