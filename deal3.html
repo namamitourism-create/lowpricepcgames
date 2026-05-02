@@ -7,7 +7,24 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
-body{background:#0b1220;color:#fff;}
+
+body{
+  background:#0b1220;
+  color:#fff;
+  position:relative;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("BG/BG1.jpe") center/cover no-repeat;
+  filter:blur(8px);
+  opacity:0.3;
+  z-index:0;
+}
+
+header,.container{position:relative;z-index:1;}
 
 header{
   background:#0a0f1a;
@@ -19,10 +36,7 @@ header{
 }
 .logo{color:#4ea1ff;font-weight:700;}
 
-.nav-btns{
-  display:flex;
-  gap:10px;
-}
+.nav-btns{display:flex;gap:10px;}
 .nav-btns button{
   padding:6px 12px;
   border:none;
@@ -32,7 +46,6 @@ header{
   cursor:pointer;
 }
 
-/* MAIN */
 .container{
   max-width:1000px;
   margin:auto;
@@ -42,16 +55,15 @@ header{
 .title{
   font-size:20px;
   margin-bottom:20px;
+  text-align:center;
 }
 
-/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
 }
 
-/* CARD */
 .card{
   background:#111a2e;
   border-radius:12px;
@@ -71,27 +83,12 @@ header{
   transition:transform 0.5s ease;
 }
 
-.card:hover img{
-  transform:scale(1.08);
-}
+.card:hover img{transform:scale(1.08);}
+.card:active{transform:scale(0.97);}
 
-.card:active{
-  transform:scale(0.97);
-}
-
-.card-content{
-  padding:10px;
-}
-
-.card h3{
-  font-size:13px;
-}
-
-.card p{
-  font-size:12px;
-  color:#aaa;
-  margin-top:6px;
-}
+.card-content{padding:10px;}
+.card h3{font-size:13px;}
+.card p{font-size:12px;color:#aaa;margin-top:6px;}
 
 /* BUY */
 .buy-box{
@@ -135,8 +132,18 @@ header{
   color:#9ca3af;
 }
 
-.btn{
+/* TIMER */
+.timer{
   margin-top:10px;
+  font-size:14px;
+  color:#ff3b3b;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:12px;
   padding:10px 20px;
   background:#4ea1ff;
   border:none;
@@ -168,45 +175,45 @@ header{
 
 <div class="grid">
 
-<!-- Farming -->
 <div class="card">
 <img src="GLOGO/50.jpg">
 <div class="card-content">
 <h3>Farming Simulator 25</h3>
-<p>Modern farming simulation with realistic machinery and open-world farming gameplay.</p>
+<p>Realistic farming simulation with modern equipment and management.</p>
 </div>
 </div>
 
-<!-- No Mans Sky -->
 <div class="card">
 <img src="GLOGO/55.jpg">
 <div class="card-content">
-<h3>No Man's Sky</h3>
-<p>Explore infinite procedurally generated planets in a massive space adventure.</p>
+<h3>No Man’s Sky</h3>
+<p>Explore a vast universe with survival, crafting, and exploration.</p>
 </div>
 </div>
 
-<!-- Subnautica -->
 <div class="card">
 <img src="GLOGO/62.jpg">
 <div class="card-content">
 <h3>Subnautica</h3>
-<p>Underwater survival adventure with exploration, crafting, and mystery.</p>
+<p>Underwater survival adventure in an alien ocean world.</p>
 </div>
 </div>
 
 </div>
 
-<!-- BUY -->
 <div class="buy-box">
 
 <div class="price-row">
-  <span class="old-price">₹899</span>
+  <span class="old-price">₹699</span>
   <span class="main-price">₹349</span>
-  <span class="discount">61% OFF</span>
+  <span class="discount">50% OFF</span>
 </div>
 
-<div class="save-text">You save ₹550 on this bundle</div>
+<div class="save-text">You save ₹350 on this bundle</div>
+
+<div class="timer" id="timer">
+Offer ends in: 22Hrs : 00mins : 00sec
+</div>
 
 <button class="btn" onclick="buyDeal()">Buy Now</button>
 
@@ -216,13 +223,30 @@ header{
 
 <script>
 
-// 🔥 IMPORTANT (FOR PAYMENT3)
+let totalSeconds = 8 * 12 * 20;
+
+function updateTimer(){
+  let hrs = Math.floor(totalSeconds / 3600);
+  let mins = Math.floor((totalSeconds % 3600) / 60);
+  let secs = totalSeconds % 60;
+
+  document.getElementById("timer").innerText =
+    `Offer ends in: ${hrs}Hrs : ${mins}mins : ${secs}sec`;
+
+  if(totalSeconds > 0){
+    totalSeconds--;
+  }
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
 function buyDeal(){
   localStorage.setItem("order", JSON.stringify({
     name: "Early Spring Deal",
     price: 349,
-    base: 899,
-    disc: 61,
+    base: 699,
+    disc: 50,
     images: ["GLOGO/50.jpg","GLOGO/55.jpg","GLOGO/62.jpg"]
   }));
 
