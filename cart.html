@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cart - Low Price PC Games</title>
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#0b1220;
+  color:#fff;
+}
+
+/* 🔥 HEADER */
+.header{
+  background:#0a0f1a;
+  padding:14px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #1f2a44;
+}
+
+.logo{
+  color:#4ea1ff;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.cart-text{
+  color:#ccc;
+  font-size:14px;
+}
+
+/* MAIN */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+/* ITEM CARD */
+.cart-item{
+  display:flex;
+  gap:15px;
+  background:#111a2e;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:15px;
+  align-items:center;
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
+  transition:0.25s;
+}
+
+.cart-item:hover{
+  transform:translateY(-3px);
+}
+
+.cart-item img{
+  width:95px;
+  height:120px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+/* DETAILS */
+.details{flex:1;}
+
+.title{
+  font-size:16px;
+  font-weight:600;
+}
+
+.price{
+  color:#ffd54f;
+  margin-top:5px;
+  font-size:15px;
+}
+
+/* CONTROLS */
+.controls{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.btn{
+  background:#1a2440;
+  border:none;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.btn:hover{background:#24305a;}
+
+.remove{
+  background:#ff3b3b;
+}
+
+.qty{
+  min-width:20px;
+  text-align:center;
+}
+
+/* TOTAL BOX */
+.total-box{
+  position:sticky;
+  bottom:0;
+  background:#111a2e;
+  padding:20px;
+  border-radius:14px;
+  margin-top:20px;
+  box-shadow:0 -10px 30px rgba(0,0,0,0.6);
+}
+
+.total{
+  font-size:20px;
+  margin-bottom:15px;
+}
+
+/* CHECKOUT */
+.checkout{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(90deg,#4ea1ff,#6bb4ff);
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.checkout:hover{
+  opacity:0.9;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  margin-top:80px;
+  color:#aaa;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .cart-item{
+    flex-direction:row;
+    gap:10px;
+  }
+
+  .cart-item img{
+    width:70px;
+    height:90px;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  .total-box{
+    border-radius:12px 12px 0 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo">LOW PRICE PC GAMES</div>
+  <div class="cart-text">Your Cart</div>
+</div>
+
+<div class="container">
+
+<div id="cartList"></div>
+
+<div class="total-box" id="totalBox" style="display:none;">
+  <div class="total" id="totalPrice"></div>
+  <button class="checkout" onclick="checkout()">Proceed to Checkout</button>
+</div>
+
+<div class="empty" id="emptyMsg">Your cart is empty</div>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function renderCart(){
+  let list=document.getElementById("cartList");
+  list.innerHTML="";
+
+  let total=0;
+
+  if(cart.length===0){
+    document.getElementById("emptyMsg").style.display="block";
+    document.getElementById("totalBox").style.display="none";
+    return;
+  }
+
+  document.getElementById("emptyMsg").style.display="none";
+  document.getElementById("totalBox").style.display="block";
+
+  cart.forEach((item,i)=>{
+
+    let name=item.name || "Game";
+    let price=Number(item.price)||0;
+    let qty=item.qty||1;
+    let img=item.img || "GLOGO/1.jpg";
+
+    total += price*qty;
+
+    list.innerHTML+=`
+      <div class="cart-item">
+        <img src="${img}">
+        <div class="details">
+          <div class="title">${name}</div>
+          <div class="price">₹${price}</div>
+
+          <div class="controls">
+            <button class="btn" onclick="changeQty(${i},-1)">−</button>
+            <div class="qty">${qty}</div>
+            <button class="btn" onclick="changeQty(${i},1)">+</button>
+            <button class="btn remove" onclick="removeItem(${i})">Remove</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("totalPrice").innerText="Total: ₹"+total;
+}
+
+function changeQty(i,change){
+  cart[i].qty += change;
+  if(cart[i].qty<=0){cart.splice(i,1);}
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function removeItem(i){
+  cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function checkout(){
+  localStorage.setItem("checkoutCart",JSON.stringify(cart));
+  window.location.href="payment2.html";
+}
+
+renderCart();
+
+</script>
+
+</body>
+</html>

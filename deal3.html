@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Early Spring Deal</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#0b1220;color:#fff;}
+
+header{
+  background:#0a0f1a;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #1f2a44;
+}
+.logo{color:#4ea1ff;font-weight:700;}
+
+.nav-btns{
+  display:flex;
+  gap:10px;
+}
+.nav-btns button{
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  background:#1f2a44;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* MAIN */
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.title{
+  font-size:20px;
+  margin-bottom:20px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+/* CARD */
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.04);
+  box-shadow:0 18px 45px rgba(0,0,0,0.7);
+}
+
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  transition:transform 0.5s ease;
+}
+
+.card:hover img{
+  transform:scale(1.08);
+}
+
+.card:active{
+  transform:scale(0.97);
+}
+
+.card-content{
+  padding:10px;
+}
+
+.card h3{
+  font-size:13px;
+}
+
+.card p{
+  font-size:12px;
+  color:#aaa;
+  margin-top:6px;
+}
+
+/* BUY */
+.buy-box{
+  margin-top:25px;
+  background:#111a2e;
+  padding:18px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.price-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.old-price{
+  color:#888;
+  text-decoration:line-through;
+  font-size:13px;
+}
+
+.main-price{
+  color:#ffd54f;
+  font-size:22px;
+  font-weight:800;
+}
+
+.discount{
+  background:#1f3b6d;
+  color:#4ea1ff;
+  font-size:11px;
+  padding:3px 6px;
+  border-radius:6px;
+}
+
+.save-text{
+  font-size:11px;
+  color:#9ca3af;
+}
+
+.btn{
+  margin-top:10px;
+  padding:10px 20px;
+  background:#4ea1ff;
+  border:none;
+  border-radius:8px;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOW PRICE PC GAMES</div>
+<div class="nav-btns">
+  <button onclick="history.back()">Back</button>
+  <button onclick="location.href='index.html'">Home</button>
+</div>
+</header>
+
+<div class="container">
+
+<div class="title">Early Spring Deal</div>
+
+<div class="grid">
+
+<!-- Farming -->
+<div class="card">
+<img src="GLOGO/50.jpg">
+<div class="card-content">
+<h3>Farming Simulator 25</h3>
+<p>Modern farming simulation with realistic machinery and open-world farming gameplay.</p>
+</div>
+</div>
+
+<!-- No Mans Sky -->
+<div class="card">
+<img src="GLOGO/55.jpg">
+<div class="card-content">
+<h3>No Man's Sky</h3>
+<p>Explore infinite procedurally generated planets in a massive space adventure.</p>
+</div>
+</div>
+
+<!-- Subnautica -->
+<div class="card">
+<img src="GLOGO/62.jpg">
+<div class="card-content">
+<h3>Subnautica</h3>
+<p>Underwater survival adventure with exploration, crafting, and mystery.</p>
+</div>
+</div>
+
+</div>
+
+<!-- BUY -->
+<div class="buy-box">
+
+<div class="price-row">
+  <span class="old-price">₹899</span>
+  <span class="main-price">₹349</span>
+  <span class="discount">61% OFF</span>
+</div>
+
+<div class="save-text">You save ₹550 on this bundle</div>
+
+<button class="btn" onclick="buyDeal()">Buy Now</button>
+
+</div>
+
+</div>
+
+<script>
+
+// 🔥 IMPORTANT (FOR PAYMENT3)
+function buyDeal(){
+  localStorage.setItem("order", JSON.stringify({
+    name: "Early Spring Deal",
+    price: 349,
+    base: 899,
+    disc: 61,
+    images: ["GLOGO/50.jpg","GLOGO/55.jpg","GLOGO/62.jpg"]
+  }));
+
+  window.location.href = "payment3.html";
+}
+
+</script>
+
+</body>
+</html>

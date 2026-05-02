@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Deals - Low Price PC Games</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#0b1220;color:#fff;overflow-x:hidden;}
+
+/* HEADER */
+header{
+  background:#0a0f1a;
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #1f2a44;
+}
+.logo{color:#4ea1ff;font-size:18px;font-weight:700;}
+
+/* ✅ NAV BACK */
+nav a{
+  color:#cbd5e1;
+  margin-left:15px;
+  text-decoration:none;
+  font-size:14px;
+}
+nav a:hover{color:#fff;}
+
+/* HERO */
+.hero{position:relative;height:260px;overflow:hidden;}
+.hero-track{position:absolute;width:100%;height:100%;display:flex;transition:1s;}
+.hero-track img{width:100%;flex-shrink:0;object-fit:cover;opacity:0.75;}
+.hero::after{content:"";position:absolute;width:100%;height:100%;background:linear-gradient(to right,#0b1220cc,#0b122099);}
+
+.hero-content{
+  position:absolute;
+  top:50%;
+  left:30px;
+  transform:translateY(-50%);
+  z-index:2;
+}
+.hero h1{font-size:28px;font-weight:700;}
+.hero p{color:#cbd5e1;margin-top:5px;}
+.hero button{
+  margin-top:12px;
+  padding:10px 18px;
+  background:#4ea1ff;
+  border:none;
+  border-radius:8px;
+  color:#fff;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* SECTION */
+.section{padding:30px;}
+.section h2{
+  font-size:18px;
+  margin-bottom:18px;
+  color:#e5e7eb;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+/* CARD */
+.card{
+  background:#111a2e;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.25s;
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* ✅ FIXED VERTICAL IMAGE */
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+}
+
+/* TEXT */
+.card-content{
+  padding:12px;
+}
+
+.card-title{
+  font-size:14px;
+  font-weight:600;
+  color:#ffffff;
+}
+
+.card-price{
+  margin-top:4px;
+  font-size:15px;
+  font-weight:700;
+  color:#ffd54f;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .hero{height:180px;}
+  .hero h1{font-size:20px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOW PRICE PC GAMES</div>
+
+<!-- ✅ NAV FIX -->
+<nav>
+<a href="index.html">Home</a>
+<a href="deals.html">Deals</a>
+</nav>
+
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-track" id="heroTrack"></div>
+
+<div class="hero-content">
+<h1>HOT DEALS</h1>
+<p>Premium bundles at best prices</p>
+<button onclick="scrollToDeals()">Explore Deals</button>
+</div>
+</section>
+
+<!-- DEALS -->
+<section class="section" id="dealsSection">
+<h2>🔥 Featured Deals</h2>
+
+<div class="grid">
+
+<div class="card" onclick="location.href='deal1.html'">
+<img src="DP/DP1.jpg">
+<div class="card-content">
+<div class="card-title">Horror Game Bundle</div>
+<div class="card-price">₹499</div>
+</div>
+</div>
+
+<div class="card" onclick="location.href='deal2.html'">
+<img src="DP/DP2.jpg">
+<div class="card-content">
+<div class="card-title">Welcome May Pack</div>
+<div class="card-price">₹299</div>
+</div>
+</div>
+
+<div class="card" onclick="location.href='deal3.html'">
+<img src="DP/DP3.jpg">
+<div class="card-content">
+<div class="card-title">Early Spring Deal</div>
+<div class="card-price">₹349</div>
+</div>
+</div>
+
+<div class="card" onclick="location.href='deal4.html'">
+<img src="DP/DP4.jpg">
+<div class="card-content">
+<div class="card-title">Street Racing Pack</div>
+<div class="card-price">₹449</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<script>
+
+// HERO SLIDER (UNCHANGED)
+const track=document.getElementById("heroTrack");
+
+for(let i=1;i<=4;i++){
+let img=document.createElement("img");
+img.src=`DL/DL${i}.jpg`;
+track.appendChild(img);
+}
+
+track.appendChild(track.children[0].cloneNode(true));
+
+let index=0;
+
+setInterval(()=>{
+index++;
+track.style.transform=`translateX(-${index*100}%)`;
+
+if(index===4){
+setTimeout(()=>{
+track.style.transition="none";
+track.style.transform="translateX(0)";
+index=0;
+setTimeout(()=>track.style.transition="1s",50);
+},1000);
+}
+
+},6000);
+
+function scrollToDeals(){
+document.getElementById("dealsSection").scrollIntoView({behavior:"smooth"});
+}
+
+</script>
+
+</body>
+</html>

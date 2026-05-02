@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Secure Payment</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:system-ui;
+  background:linear-gradient(180deg,#0b1220,#070d18);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+}
+
+.wrapper{
+  width:100%;
+  max-width:420px;
+  padding:20px;
+}
+
+.header{text-align:center;margin-bottom:20px;}
+.logo{color:#4ea1ff;font-weight:700;font-size:18px;}
+.secure{font-size:12px;color:#aaa;}
+
+.card{
+  background:#111a2e;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:15px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+h2{margin-bottom:12px;font-size:18px;}
+
+.bundle{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.bundle img{
+  width:100%;
+  max-width:90px;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  flex:1;
+}
+
+.total{
+  font-size:20px;
+  font-weight:bold;
+  color:#ffd54f;
+}
+
+/* FORM */
+.form-group{margin-top:12px;}
+.form-group label{font-size:12px;color:#aaa;}
+
+.form-group input{
+  width:100%;
+  margin-top:5px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #2a3555;
+  background:#0f172a;
+  color:#fff;
+}
+
+.error{font-size:11px;color:#ff4d4d;display:none;}
+
+.btn{
+  width:100%;
+  margin-top:15px;
+  padding:13px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#4ea1ff,#6bb4ff);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn:disabled{opacity:0.5;}
+
+.pay-option{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:10px;
+  background:#1a2440;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+.pay-option img{width:28px;}
+
+.hidden{display:none;}
+.complete{background:green;display:none;}
+
+/* 🔥 FIXED TXN INPUT */
+.txn-input{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #2a3555;
+  background:#0f172a;
+  color:#fff;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="header">
+  <div class="logo">LOW PRICE PC GAMES</div>
+  <div class="secure">🔒 Secure Checkout</div>
+</div>
+
+<!-- ORDER -->
+<div class="card">
+  <h2 id="title"></h2>
+  <div class="bundle" id="bundleImages"></div>
+  <div class="total" id="price"></div>
+</div>
+
+<!-- BILLING -->
+<div class="card" id="billingBox">
+
+  <div class="form-group">
+    <label>Name</label>
+    <input id="name" placeholder="Full name">
+  </div>
+
+  <div class="form-group">
+    <label>Email Address</label>
+    <input id="email" placeholder="example@gmail.com">
+    <div class="error" id="emailError">Invalid Gmail</div>
+  </div>
+
+  <div class="form-group">
+    <label>Phone</label>
+    <input id="phone" placeholder="10 digit phone number">
+    <div class="error" id="phoneError">Invalid phone</div>
+  </div>
+
+  <div class="form-group">
+    <label>Address</label>
+    <input id="address" placeholder="Full address">
+  </div>
+
+  <button class="btn" id="processBtn" onclick="processOrder()" disabled>
+    Proceed to Payment
+  </button>
+</div>
+
+<!-- PAYMENT -->
+<div class="card hidden" id="paymentBox">
+
+  <div class="pay-option" onclick="pay()">
+    <span>Google Pay</span>
+    <img src="https://img.icons8.com/color/48/google-pay.png">
+  </div>
+
+  <div class="pay-option" onclick="pay()">
+    <span>PhonePe</span>
+    <img src="https://img.icons8.com/fluency/48/phonepe.png">
+  </div>
+
+  <div class="pay-option" onclick="pay()">
+    <span>Paytm</span>
+    <img src="https://img.icons8.com/color/48/paytm.png">
+  </div>
+
+  <div class="pay-option" onclick="showQR()">
+    <span>Scan QR Code</span>
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/qr-code.png">
+  </div>
+
+</div>
+
+<!-- QR -->
+<div class="card hidden" id="qrBox">
+  <img src="QR/QR1.jpg" style="width:100%;border-radius:10px;">
+
+  <!-- 🔥 FIXED INPUT -->
+  <input id="txn" class="txn-input" placeholder="Enter Transaction ID">
+</div>
+
+<button class="btn complete" id="doneBtn" onclick="completeOrder()">
+Payment Completed
+</button>
+
+</div>
+
+<script>
+
+let order = JSON.parse(localStorage.getItem("order"));
+
+document.getElementById("title").innerText = order.name;
+document.getElementById("price").innerText = "Total ₹"+order.price;
+
+let imgBox = document.getElementById("bundleImages");
+order.images.forEach(img=>{
+let i=document.createElement("img");
+i.src=img;
+imgBox.appendChild(i);
+});
+
+document.querySelectorAll("input").forEach(i=>i.addEventListener("input",validate));
+
+function validate(){
+let email=document.getElementById("email").value;
+let phone=document.getElementById("phone").value;
+
+let emailValid=email.endsWith("@gmail.com");
+let phoneValid=/^[0-9]{10}$/.test(phone);
+
+document.getElementById("emailError").style.display=emailValid?"none":"block";
+document.getElementById("phoneError").style.display=phoneValid?"none":"block";
+
+document.getElementById("processBtn").disabled=
+!(document.getElementById("name").value && emailValid && phoneValid && document.getElementById("address").value);
+}
+
+function processOrder(){
+document.getElementById("billingBox").classList.add("hidden");
+document.getElementById("paymentBox").classList.remove("hidden");
+}
+
+function pay(){
+let upi="dj55alok-1@okhdfcbank";
+let id="LP"+Date.now();
+localStorage.setItem("orderID",id);
+
+window.location.href=`upi://pay?pa=${upi}&pn=Alook&am=${order.price}&cu=INR`;
+
+setTimeout(()=>{
+document.getElementById("paymentBox").classList.add("hidden");
+document.getElementById("doneBtn").style.display="block";
+},4000);
+}
+
+function showQR(){
+document.getElementById("qrBox").classList.remove("hidden");
+
+setTimeout(()=>{
+document.getElementById("doneBtn").style.display="block";
+},9000);
+}
+
+function completeOrder(){
+
+let id=localStorage.getItem("orderID");
+
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
+let txn=document.getElementById("txn").value;
+
+let msg=`Hello Low Price PC Games,
+
+Payment Successful
+
+🎮 ${order.name}
+💰 Total: ₹${order.price}
+
+👤 Name: ${name}
+📧 Email: ${email}
+📱 Phone: ${phone}
+🏠 Address: ${address}
+
+🧾 Txn ID: ${txn}
+🆔 Order ID: ${id}
+
+Please process the delivery`;
+
+window.open(`https://api.whatsapp.com/send?phone=919395579036&text=${encodeURIComponent(msg)}`);
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Racing Pack</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#0b1220;color:#fff;}
+
+header{
+  background:#0a0f1a;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #1f2a44;
+}
+.logo{color:#4ea1ff;font-weight:700;}
+
+.nav-btns{
+  display:flex;
+  gap:10px;
+}
+.nav-btns button{
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  background:#1f2a44;
+  color:#fff;
+  cursor:pointer;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.title{
+  font-size:20px;
+  margin-bottom:20px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.04);
+  box-shadow:0 18px 45px rgba(0,0,0,0.7);
+}
+
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  transition:transform 0.5s ease;
+}
+
+.card:hover img{
+  transform:scale(1.08);
+}
+
+.card:active{
+  transform:scale(0.97);
+}
+
+.card-content{
+  padding:10px;
+}
+
+.card h3{
+  font-size:13px;
+}
+
+.card p{
+  font-size:12px;
+  color:#aaa;
+  margin-top:6px;
+}
+
+.buy-box{
+  margin-top:25px;
+  background:#111a2e;
+  padding:18px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.price-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.old-price{
+  color:#888;
+  text-decoration:line-through;
+  font-size:13px;
+}
+
+.main-price{
+  color:#ffd54f;
+  font-size:22px;
+  font-weight:800;
+}
+
+.discount{
+  background:#1f3b6d;
+  color:#4ea1ff;
+  font-size:11px;
+  padding:3px 6px;
+  border-radius:6px;
+}
+
+.save-text{
+  font-size:11px;
+  color:#9ca3af;
+}
+
+.btn{
+  margin-top:10px;
+  padding:10px 20px;
+  background:#4ea1ff;
+  border:none;
+  border-radius:8px;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOW PRICE PC GAMES</div>
+<div class="nav-btns">
+  <button onclick="history.back()">Back</button>
+  <button onclick="location.href='index.html'">Home</button>
+</div>
+</header>
+
+<div class="container">
+
+<div class="title">Street Racing Pack</div>
+
+<div class="grid">
+
+<!-- NFS Unbound -->
+<div class="card">
+<img src="GLOGO/101.jpg">
+<div class="card-content">
+<h3>Need for Speed Unbound</h3>
+<p>Fast-paced street racing with stylized visuals and intense police chases.</p>
+</div>
+</div>
+
+<!-- Forza -->
+<div class="card">
+<img src="GLOGO/16.jpg">
+<div class="card-content">
+<h3>Forza Horizon 5</h3>
+<p>Open-world racing across Mexico with stunning graphics and dynamic events.</p>
+</div>
+</div>
+
+<!-- NFS Heat -->
+<div class="card">
+<img src="GLOGO/102.jpg">
+<div class="card-content">
+<h3>Need for Speed Heat</h3>
+<p>Day-night racing system with high-speed action and illegal street racing.</p>
+</div>
+</div>
+
+</div>
+
+<div class="buy-box">
+
+<div class="price-row">
+  <span class="old-price">₹999</span>
+  <span class="main-price">₹449</span>
+  <span class="discount">55% OFF</span>
+</div>
+
+<div class="save-text">You save ₹550 on this bundle</div>
+
+<button class="btn" onclick="buyDeal()">Buy Now</button>
+
+</div>
+
+</div>
+
+<script>
+
+function buyDeal(){
+  localStorage.setItem("order", JSON.stringify({
+    name: "Street Racing Pack",
+    price: 449,
+    base: 999,
+    disc: 55,
+    images: ["GLOGO/101.jpg","GLOGO/16.jpg","GLOGO/102.jpg"]
+  }));
+
+  window.location.href = "payment3.html";
+}
+
+</script>
+
+</body>
+</html>

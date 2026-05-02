@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Secure Payment</title>
+
+<style>
+html, body{
+  overflow-x:hidden;
+  touch-action:manipulation;
+}
+body{background:#0b1220;color:#fff;font-family:sans-serif;margin:0;}
+.container{max-width:420px;margin:auto;padding:20px;}
+.card{background:#111a2e;border-radius:14px;padding:20px;margin-bottom:20px;}
+
+h2{margin:0 0 10px;}
+.small{color:#aaa;font-size:13px;}
+
+.price{color:#ffd54f;font-size:22px;font-weight:bold;}
+.old{color:#888;text-decoration:line-through;font-size:14px;}
+.disc{color:#ff3b3b;font-size:14px;}
+
+.game-img{width:100%;border-radius:10px;margin-bottom:10px;}
+
+.pay-option{
+display:flex;align-items:center;justify-content:space-between;
+padding:12px;border-radius:10px;background:#1a2440;margin-top:10px;cursor:pointer;
+}
+.pay-option:hover{background:#24305a;}
+.pay-option img{width:28px;height:28px;}
+
+.btn{
+width:100%;padding:12px;margin-top:15px;border:none;border-radius:8px;
+background:#4ea1ff;color:#fff;font-size:15px;cursor:pointer;
+}
+
+.complete{background:green;display:none;}
+
+.form-group{display:flex;flex-direction:column;margin-top:12px;}
+.form-group label{font-size:13px;color:#aaa;margin-bottom:4px;}
+.form-group input{
+padding:12px;border-radius:8px;border:1px solid #2a3555;
+background:#0f172a;color:#fff;
+}
+
+.error{font-size:12px;color:#ff4d4d;display:none;}
+
+#processBtn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<img id="gameImg" class="game-img">
+<h2 id="gameName">Loading...</h2>
+
+<div>
+<span class="price" id="price"></span>
+<span class="old" id="old"></span>
+<span class="disc" id="disc"></span>
+</div>
+
+<p class="small">Secure UPI Payment</p>
+</div>
+
+<div class="card" id="billingBox">
+
+<h2>Billing Details</h2>
+
+<div class="form-group">
+<label>Full Name</label>
+<input id="name" placeholder="Enter your full name">
+</div>
+
+<div class="form-group">
+<label>Email Address</label>
+<input id="email" placeholder="example@gmail.com">
+<div class="error" id="emailError">Invalid Gmail</div>
+</div>
+
+<div class="form-group">
+<label>Phone</label>
+<input id="phone" placeholder="Enter 10 digit phone number">
+<div class="error" id="phoneError">Invalid phone</div>
+</div>
+
+<div class="form-group">
+<label>Address</label>
+<input id="address" placeholder="Enter your full address">
+</div>
+
+<button class="btn" id="processBtn" onclick="processOrder()" disabled>Proceed to Payment</button>
+
+</div>
+
+<div class="card hidden" id="paymentBox">
+
+<div class="pay-option" onclick="payUPI('gpay')">
+<span>Google Pay</span>
+<img src="https://img.icons8.com/color/48/google-pay.png">
+</div>
+
+<div class="pay-option" onclick="payUPI('phonepe')">
+<span>PhonePe</span>
+<img src="https://img.icons8.com/fluency/48/phonepe.png">
+</div>
+
+<div class="pay-option" onclick="payUPI('paytm')">
+<span>Paytm</span>
+<img src="https://img.icons8.com/color/48/paytm.png">
+</div>
+
+<div class="pay-option" onclick="showQR()">
+<span>Scan QR Code</span>
+<img src="https://img.icons8.com/ios-filled/50/ffffff/qr-code.png">
+</div>
+
+</div>
+
+<!-- QR -->
+<div class="card hidden" id="qrBox">
+<img id="qrImg" style="width:100%; max-width:280px; display:block; margin:auto; border-radius:10px;">
+
+<input id="txn" placeholder="Enter Transaction ID" style="margin-top:10px;padding:10px;width:100%;border-radius:6px;border:none;">
+</div>
+
+<button class="btn complete" id="doneBtn" onclick="completeOrder()">Payment Completed</button>
+
+</div>
+
+<script>
+
+let order=JSON.parse(localStorage.getItem("order"));
+
+if(order){
+document.getElementById("gameName").innerText=order.name;
+document.getElementById("price").innerText="₹"+order.price;
+document.getElementById("old").innerText=" ₹"+order.base;
+document.getElementById("disc").innerText=" -"+order.disc+"%";
+document.getElementById("gameImg").src=order.img;
+}
+
+let inputs=document.querySelectorAll("#billingBox input");
+inputs.forEach(i=>i.addEventListener("input",validateForm));
+
+function validateForm(){
+let name=nameField().value.trim();
+let email=emailField().value.trim();
+let phone=phoneField().value.trim();
+let address=addressField().value.trim();
+
+let emailValid=email.endsWith("@gmail.com");
+let phoneValid=/^[0-9]{10}$/.test(phone);
+
+document.getElementById("emailError").style.display=emailValid?"none":"block";
+document.getElementById("phoneError").style.display=phoneValid?"none":"block";
+
+document.getElementById("processBtn").disabled=!(name && emailValid && phoneValid && address);
+}
+
+function nameField(){return document.getElementById("name")}
+function emailField(){return document.getElementById("email")}
+function phoneField(){return document.getElementById("phone")}
+function addressField(){return document.getElementById("address")}
+
+function processOrder(){
+localStorage.setItem("billing",JSON.stringify({
+name:nameField().value,
+email:emailField().value,
+phone:phoneField().value,
+address:addressField().value
+}));
+
+document.getElementById("billingBox").classList.add("hidden");
+document.getElementById("paymentBox").classList.remove("hidden");
+}
+
+function payUPI(app){
+let upiID="dj55alok-1@okhdfcbank";
+
+let orderID="LP"+Date.now();
+localStorage.setItem("orderID",orderID);
+
+let url=`upi://pay?pa=${upiID}&pn=Alook&am=${order.price}&cu=INR`;
+
+window.location.href=url;
+
+setTimeout(()=>{
+document.getElementById("paymentBox").classList.add("hidden");
+document.getElementById("doneBtn").style.display="block";
+},4000);
+}
+
+// 🔥 QR FIX (ONLY CHANGE)
+function showQR(){
+document.getElementById("qrBox").classList.remove("hidden");
+
+// random QR image
+let qrImages=["QR/QR1.jpg","QR/QR2.jpg"];
+document.getElementById("qrImg").src=qrImages[Math.floor(Math.random()*2)];
+
+let startTime=Date.now();
+
+let check=setInterval(()=>{
+let txn=document.getElementById("txn").value.trim();
+
+if(txn && (Date.now()-startTime>9000)){
+clearInterval(check);
+
+document.getElementById("paymentBox").classList.add("hidden");
+document.getElementById("doneBtn").style.display="block";
+}
+},1000);
+}
+
+function completeOrder(){
+let billing=JSON.parse(localStorage.getItem("billing"));
+let orderID=localStorage.getItem("orderID");
+
+let msg=`Hello Low Price PC Games,
+Payment Successful✅
+
+🛒Order Details 
+🎮Game: ${order.name}
+💰Price: ₹${order.price}
+
+Name: ${billing.name}
+Email: ${billing.email}
+Phone: ${billing.phone}
+Address: ${billing.address}
+
+🆔Order ID: ${orderID}
+
+Please process the delivery`;
+
+window.open(`https://api.whatsapp.com/send?phone=919395579036&text=${encodeURIComponent(msg)}`);
+}
+
+</script>
+
+</body>
+</html>

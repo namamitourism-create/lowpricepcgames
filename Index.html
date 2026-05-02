@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Low Price PC Games</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+body{background:#0b1220;color:#fff;scroll-behavior:smooth;overflow-x:hidden;}
+
+header{
+  background:#0a0f1a;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{color:#4ea1ff;font-size:22px;font-weight:bold;}
+.right-group{display:flex;align-items:center;gap:15px;}
+
+nav a{color:#ccc;margin:0 8px;text-decoration:none;transition:0.3s;}
+nav a:hover{color:#4ea1ff;}
+
+.search-box{padding:8px 10px;border:none;border-radius:6px;width:180px;}
+
+.cart-icon{position:relative;font-size:22px;cursor:pointer;}
+#cartDot{position:absolute;top:-5px;right:-5px;width:10px;height:10px;background:red;border-radius:50%;display:none;}
+
+/* HERO */
+.hero{position:relative;height:350px;overflow:hidden;}
+.hero-track{position:absolute;width:100%;height:100%;display:flex;transition:1s;}
+.hero-track img{width:100%;flex-shrink:0;object-fit:cover;opacity:0.6;}
+.hero::after{content:"";position:absolute;width:100%;height:100%;background:linear-gradient(to right,#0b122099,#0b1220cc);}
+.hero-content{position:absolute;top:50%;left:40px;transform:translateY(-50%);z-index:2;animation:fadeUp 1s;}
+.hero h1{font-size:40px;}
+.hero button{margin-top:10px;padding:12px 26px;background:#4ea1ff;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:0.25s;}
+.hero button:hover{transform:translateY(-3px);}
+
+/* GRID */
+.section{padding:40px;}
+.games{display:grid;grid-template-columns:repeat(5,1fr);gap:25px;}
+
+.game{
+  background:#111a2e;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.4s;
+}
+.game.show{opacity:1;transform:translateY(0);}
+.game:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 30px rgba(0,0,0,0.6);}
+
+.game img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:10px;transition:0.3s;}
+.game:hover img{transform:scale(1.05);}
+
+.game h3{font-size:14px;margin-top:8px;}
+.game p{font-size:12px;color:#aaa;margin-top:5px;}
+
+.stars{margin-top:6px;color:#ffc107;}
+.reviews{color:#aaa;font-size:12px;margin-left:6px;}
+
+.price-box{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.price{color:#ffd54f;font-size:18px;font-weight:bold;}
+.old-price{text-decoration:line-through;color:#888;}
+.discount{color:#ff3b3b;font-weight:bold;}
+
+.actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;}
+
+.btn{padding:10px;border:none;border-radius:6px;cursor:pointer;transition:0.25s;}
+.buy{background:#4ea1ff;color:#fff;}
+.buy:hover{background:#3a8be0;}
+.cart{background:#222;color:#fff;border:1px solid #555;}
+.cart:hover{background:#333;}
+
+footer{text-align:center;padding:20px;background:#0a0f1a;margin-top:30px;}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* MOBILE FIX */
+@media(max-width:768px){
+  header{padding:10px 12px;}
+  .logo{font-size:16px;line-height:1.1;}
+  .right-group{gap:8px;}
+  nav{display:flex;flex-direction:column;font-size:12px;}
+  nav a{margin:0;}
+  .search-box{width:110px;padding:6px;}
+  .hero{height:220px;}
+  .hero-content{left:15px;right:15px;}
+  .hero h1{font-size:22px;}
+  .hero button{padding:8px 16px;font-size:13px;}
+  .section{padding:15px 12px;}
+  .games{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .game{padding:10px;}
+  .game h3{font-size:13px;}
+  .game p{font-size:11px;}
+  .price{font-size:15px;}
+  .btn{padding:8px;font-size:12px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOW PRICE PC GAMES</div>
+<div class="right-group">
+<nav>
+<a href="#" onclick="location.reload()">Home</a>
+<a href="#gamesSection">Games</a>
+<a href="deals.html">Deals</a>
+</nav>
+<input class="search-box" placeholder="Search...">
+<div class="cart-icon" onclick="openCart()">🛒<span id="cartDot"></span></div>
+</div>
+</header>
+
+<section class="hero">
+<div class="hero-track" id="heroTrack"></div>
+<div class="hero-content">
+<h1>PC GAMES LOW PRICES</h1>
+<p>Instant delivery. Safe purchase.</p>
+<button onclick="location.href='deals.html'">Hot Deals</button>
+</div>
+</section>
+
+<section class="section" id="gamesSection">
+<h2>ALL GAMES</h2>
+<div class="games" id="gamesContainer"></div>
+</section>
+
+<footer>LowPrice Pc Games© 2026</footer>
+
+<script>
+
+// HERO
+const track=document.getElementById("heroTrack");
+for(let i=1;i<=5;i++){
+let img=document.createElement("img");
+img.src=`BLOGO/B${i}.jpg`;
+track.appendChild(img);
+}
+track.appendChild(track.children[0].cloneNode(true));
+
+let index=0;
+setInterval(()=>{
+index++;
+track.style.transform=`translateX(-${index*100}%)`;
+if(index===5){
+setTimeout(()=>{
+track.style.transition="none";
+track.style.transform="translateX(0)";
+index=0;
+setTimeout(()=>track.style.transition="1s",50);
+},1000);
+}
+},6000);
+
+// FULL GAME DATA
+const gameData = [
+{title:"Assassin’s Creed Shadows",desc:"Stealth-action RPG set in feudal Japan with dual protagonists and open-world exploration."},
+{title:"EA Sports FC 26",desc:"Next-gen football simulation with realistic gameplay and immersive career modes."},
+{title:"Mafia: The Old Country",desc:"Story-driven crime saga exploring origins of organized crime."},
+{title:"Silent Hill F",desc:"Psychological horror with deep storytelling and disturbing atmosphere."},
+{title:"Black Myth: Wukong",desc:"Action RPG inspired by Journey to the West."},
+{title:"Call of Duty: Modern Warfare II (2022)",desc:"Tactical shooter with cinematic campaign."},
+{title:"Call of Duty: Modern Warfare III (2023)",desc:"Fast-paced FPS with advanced mechanics."},
+{title:"Nioh",desc:"Hardcore samurai RPG with deep combat."},
+{title:"Avatar: Frontiers of Pandora",desc:"Open-world adventure on Pandora."},
+{title:"Call of Duty: Black Ops Cold War",desc:"Cold War shooter with zombies mode."},
+{title:"Battlefield 6",desc:"Large-scale warfare shooter."},
+{title:"Crimson Desert",desc:"Open-world action RPG."},
+{title:"Resident Evil: Requiem",desc:"Survival horror experience."},
+{title:"Forza Horizon 6",desc:"Open-world racing game."},
+{title:"Death Stranding 2",desc:"Narrative-driven adventure."},
+{title:"Forza Horizon 5",desc:"Racing in Mexico."},
+{title:"Cricket 26",desc:"Realistic cricket simulation."},
+{title:"F1 25",desc:"Official Formula 1 racing."},
+{title:"Microsoft Flight Simulator 2020",desc:"Ultra-realistic flight sim."},
+{title:"Microsoft Flight Simulator 2024",desc:"Next-gen flight sim."},
+{title:"WWE 2K26",desc:"Professional wrestling game."},
+{title:"Rust",desc:"Multiplayer survival game."},
+{title:"Pragmata",desc:"Futuristic sci-fi adventure."},
+{title:"Grand Theft Auto V",desc:"Open-world crime epic."},
+{title:"Red Dead Redemption 2",desc:"Immersive western adventure."},
+{title:"The Last of Us Part II Remastered",desc:"Enhanced survival experience."},
+{title:"The Last of Us Part I",desc:"Emotional survival action."},
+{title:"Euro Truck Simulator 2",desc:"Truck simulation across Europe."},
+{title:"Far Cry 6",desc:"Open world fps shooting game with a proper storyline."},
+{title:"Far Cry New Dawn",desc:"Open world fps shooting game with a proper storyline."},
+{title:"Far Cry 5",desc:"Open world fps shooting game with a proper storyline."},
+{title:"Far Cry 4",desc:"Open world fps shooting game with a proper storyline."},
+{title:"Far Cry 3",desc:"Open world fps shooting game with a proper storyline."},
+{title:"Dying Light: The Beast",desc:"Open-world zombie survival."},
+{title:"Forza Horizon 4",desc:"Open-world racing game."},
+{title:"MotoGP 2026",desc:"Bike racing simulation."},
+{title:"Resident Evil Biohazared",desc:"Survival horror experience."},
+{title:"Kingdom Come Deliverance 2",desc:"Realistic medieval RPG."},
+{title:"Resident Evil Village",desc:"Action horror survival."},
+{title:"Ghost of tsushima director's cut",desc:"Tactical military shooter."},
+{title:"Street Fighter 6",desc:"Classic fighting game."},
+{title:"EA Sports FC 25",desc:"Football simulation."},
+{title:"EA Sports FC 24",desc:"Football game."},
+{title:"FIFA 23",desc:"Football simulation."},
+{title:"FIFA 22",desc:"Football simulation."},
+{title:"FIFA 21",desc:"Football simulation."},
+{title:"FIFA 20",desc:"Football simulation."},
+{title:"SnowRunner",desc:"Off-road driving simulator."},
+{title:"American Truck Simulator",desc:"Truck driving simulation."},
+{title:"Farming Simulator 25",desc:"Modern farming simulator."},
+{title:"Farming Simulator 22",desc:"High-quality farming game."},
+{title:"Dying Light 2",desc:"Open-world zombie survival."},
+{title:"Dying Light",desc:"Parkour zombie survival."},
+{title:"Days Gone",desc:"Open-world survival action."},
+{title:"No man's sky",desc:"Space exploration sandbox."},
+{title:"Squad",desc:"Large-scale military shooter."},
+{title:"ARMA 3",desc:"Realistic tactical war simulator."},
+{title:"Resident Evil 2 Remake",desc:"Survival horror remake."},
+{title:"Resident Evil 4 Remake",desc:"Action horror remake."},
+{title:"Outlast",desc:"Psychological horror game."},
+{title:"Cities Skylines 2",desc:"City building simulation."},
+{title:"Subnautica",desc:"Underwater survival game."},
+{title:"Assassin’s Creed Origins",desc:"Open-world action RPG."},
+{title:"Assassin’s Creed Odyssey",desc:"Ancient Greece RPG."},
+{title:"Assassin’s Creed Valhalla",desc:"Viking RPG."},
+{title:"Assassin’s Creed Mirage",desc:"Stealth action game."},
+{title:"Mafia III",desc:"Crime story-driven game."},
+{title:"Mafia II",desc:"Classic mafia story."},
+{title:"Watch Dogs Legion",desc:"Open-world hacking game."},
+{title:"Watch Dogs 2",desc:"Hacker open-world game."},
+{title:"Watch Dogs",desc:"Open-world hacking action."},
+{title:"Sleeping Dogs",desc:"Martial arts open-world action."},
+{title:"Show of the tomb raider",desc:"Adventure exploration game."},
+{title:"Rise of the Tomb Raider",desc:"Survival adventure game."},
+{title:"Hitman 2",desc:"Stealth assassination game."},
+{title:"Hitman World of assasiation",desc:"Stealth action gameplay."},
+{title:"Farming Simulator 23",desc:"Farming simulation."},
+{title:"Battlefield 2042",desc:"World War shooter."},
+{title:"Battlefield 5",desc:"WW2 multiplayer shooter."},
+{title:"Battlefield 1",desc:"Modern warfare shooter."},
+{title:"Control",desc:"Action-adventure supernatural game."},
+{title:"Cyberpunk 2077",desc:"Open-world futuristic RPG."},
+{title:"Elden Ring",desc:"Dark fantasy action RPG."},
+{title:"The Crew 2",desc:"Open-world racing game."},
+{title:"The Witcher 3",desc:"Story-rich open-world RPG."},
+{title:"Train Sim World 6",desc:"Train driving simulator."},
+{title:"Assetto Corsa EVO",desc:"Realistic racing simulation."},
+{title:"Forza Motorsport",desc:"Professional racing simulation."},
+{title:"Spider-Man 2",desc:"Action superhero adventure."},
+{title:"Spider-Man Remastered",desc:"Open-world superhero game."},
+{title:"God of War",desc:"Story-driven action adventure."},
+{title:"God of War Ragnarok",desc:"Mythological action adventure."},
+{title:"Uncharted 4",desc:"Adventure treasure hunting game."},
+{title:"Uncharted Lost Legacy",desc:"Action-adventure spin-off."},
+{title:"Horizon Forbidden West",desc:"Open-world action RPG."},
+{title:"Horizon Zero Dawn",desc:"Post-apocalyptic action RPG."},
+{title:"Baldur’s Gate 3",desc:"Turn-based fantasy RPG."},
+{title:"Metro 2033 Exodus",desc:"Story-driven survival shooter."},
+{title:"Just Cause 4 Reloaded",desc:"Open-world action chaos."},
+{title:"Just Cause 3",desc:"Explosive sandbox action game."},
+{title:"Need for Speed Unbound",desc:"Arcade street racing with stylized visuals, police chases, car customization, and high-speed open-world gameplay."},
+{title:"Need for Speed Heat",desc:"Day-night street racing with legal events by day and intense illegal races by night, featuring deep car tuning and pursuits."}
+];
+
+// RENDER
+const container=document.getElementById("gamesContainer");
+
+for(let i=1;i<=102;i++){
+let game=document.createElement("div");
+game.className="game";
+
+let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
+let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game.";
+
+let r=Math.random();
+let stars=r<0.5?"★★★★☆":r<0.8?"★★★☆☆":r<0.95?"★★★★⯪":"★★★★★";
+let reviews=(stars==="★★★★★"||stars==="★★★★⯪")?Math.floor(Math.random()*500)+300:Math.floor(Math.random()*250)+30;
+
+const prices=[199,249,299];
+let finalPrice=prices[Math.floor(Math.random()*3)];
+let discount=Math.floor(Math.random()*40)+40;
+let basePrice=Math.ceil((finalPrice*100/(100-discount))/100)*100;
+
+game.innerHTML=`
+<img src="${
+i<=99 ? 'GLOGO/'+i+'.jpg' :
+i<=198 ? 'GLOGO2/'+i+'.jpg' :
+i<=297 ? 'GLOGO3/'+i+'.jpg' :
+'GLOGO/'+i+'.jpg'
+}">
+<h3>${title}</h3>
+<p>${desc}</p>
+
+<div class="stars">${stars}<span class="reviews">(${reviews})</span></div>
+
+<div class="price-box">
+<div class="price">₹${finalPrice}</div>
+<div class="old-price">₹${basePrice}</div>
+<div class="discount">-${discount}%</div>
+</div>
+
+<div class="actions">
+<button class="btn buy" onclick="buyGame(event,'${title}',${finalPrice},${basePrice},${discount},${i})">BUY NOW</button>
+<button class="btn cart" onclick="addToCart(event)">ADD TO CART</button>
+</div>
+`;
+
+container.appendChild(game);
+}
+
+// SCROLL
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting){e.target.classList.add("show");}
+});
+});
+document.querySelectorAll(".game").forEach(g=>observer.observe(g));
+
+// CART
+function addToCart(e){
+let card = e.target.closest(".game");
+
+let name = card.querySelector("h3").innerText;
+let price = parseInt(card.querySelector(".price").innerText.replace("₹",""));
+let img = card.querySelector("img").getAttribute("src");
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// check existing
+let existing = cart.find(item => item.name === name);
+
+if(existing){
+  existing.qty += 1;
+} else {
+  cart.push({
+    name: name,
+    price: price,
+    img: img,
+    qty: 1
+  });
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+document.getElementById("cartDot").style.display="block";
+}
+
+// 🔥 FIXED BUY FUNCTION (ONLY CHANGE)
+function buyGame(e,name,price,base,disc,index){
+  e.stopPropagation();
+
+  localStorage.setItem("order", JSON.stringify({
+    name:name,
+    price:price,
+    base:base,
+    disc:disc,
+    img:
+index<=99 ? 'GLOGO/'+index+'.jpg' :
+index<=198 ? 'GLOGO2/'+index+'.jpg' :
+index<=297 ? 'GLOGO3/'+index+'.jpg' :
+'GLOGO/'+index+'.jpg' // 🔥 THIS FIXES IMAGE ISSUE
+  }));
+
+  window.location.href="payment.html";
+}
+
+function openCart(){window.location.href="cart.html";}
+function scrollToGames(){document.getElementById("gamesSection").scrollIntoView({behavior:"smooth"});}
+
+// SEARCH
+const searchInput=document.querySelector(".search-box");
+searchInput.addEventListener("input",function(){
+const q=this.value.toLowerCase();
+document.querySelectorAll(".game").forEach(g=>{
+let t=g.querySelector("h3").innerText.toLowerCase();
+let d=g.querySelector("p").innerText.toLowerCase();
+g.style.display=(t.includes(q)||d.includes(q))?"flex":"none";
+});
+});
+
+</script>
+
+</body>
+</html>
