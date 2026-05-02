@@ -14,14 +14,12 @@ body{
   position:relative;
 }
 
-/* 🔥 FIXED BG (ONLY THIS CHANGED) */
+/* BG */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-
   background:url("BG/BG1.jpe") center/cover no-repeat;
-
   filter:blur(8px);
   opacity:0.3;
   z-index:0;
@@ -31,7 +29,6 @@ header,.container{
   position:relative;
   z-index:1;
 }
-/* 🔥 END FIX */
 
 header{
   background:#0a0f1a;
@@ -65,6 +62,7 @@ header{
 .title{
   font-size:20px;
   margin-bottom:20px;
+  text-align:center;
 }
 
 .grid{
@@ -156,8 +154,18 @@ header{
   color:#9ca3af;
 }
 
-.btn{
+/* 🔥 TIMER STYLE */
+.timer{
   margin-top:10px;
+  font-size:14px;
+  color:#ff3b3b;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:12px;
   padding:10px 20px;
   background:#4ea1ff;
   border:none;
@@ -225,6 +233,11 @@ header{
 
 <div class="save-text">You save ₹500 on this bundle</div>
 
+<!-- 🔥 TIMER -->
+<div class="timer" id="timer">
+Offer ends in: 22Hrs : 00mins : 00sec
+</div>
+
 <button class="btn" onclick="buyDeal()">Buy Now</button>
 
 </div>
@@ -232,6 +245,26 @@ header{
 </div>
 
 <script>
+
+// TIMER (resets on every open)
+let totalSeconds = 22 * 60 * 60;
+
+function updateTimer(){
+  let hrs = Math.floor(totalSeconds / 3600);
+  let mins = Math.floor((totalSeconds % 3600) / 60);
+  let secs = totalSeconds % 60;
+
+  document.getElementById("timer").innerText =
+    `Offer ends in: ${hrs}Hrs : ${mins}mins : ${secs}sec`;
+
+  if(totalSeconds > 0){
+    totalSeconds--;
+  }
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
 function buyDeal(){
   localStorage.setItem("order", JSON.stringify({
     name: "Horror Game Bundle",
@@ -240,8 +273,10 @@ function buyDeal(){
     disc: 50,
     images: ["GLOGO/58.jpg","GLOGO/59.jpg","GLOGO/39.jpg"]
   }));
+
   window.location.href = "payment3.html";
 }
+
 </script>
 
 </body>
