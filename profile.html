@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#060d1a;color:#fff;}
+.container{display:flex;}
+
+.sidebar{
+  width:220px;background:#050a14;height:100vh;padding:20px;
+}
+.sidebar h2{color:#4ea1ff;margin-bottom:25px;}
+.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;}
+.sidebar a:hover{color:#4ea1ff;}
+
+.main{flex:1;padding:25px;}
+
+.profile-header{
+  background:#0f172a;
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+}
+
+.banner{
+  height:160px;
+  background:url('BG/BG1.jpe') center/cover;
+  position:relative;
+}
+
+.icon-btn{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:#1f2937;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:14px;
+  position:absolute;
+  display:none;
+}
+
+.banner-edit{bottom:10px;right:10px;}
+
+.dp{
+  width:90px;height:90px;border-radius:50%;
+  overflow:hidden;border:3px solid #4ea1ff;
+  position:relative;
+}
+.dp img{width:100%;height:100%;object-fit:cover;}
+
+.dp-edit{bottom:5px;right:5px;}
+
+.profile-content{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:20px;
+}
+
+.user h2{font-size:20px;}
+
+.username-edit{
+  display:none;
+  padding:4px;
+  background:#020617;
+  border:1px solid #333;
+  color:#fff;
+}
+
+.desc-box{
+  margin-top:6px;
+  background:#020617;
+  border:1px solid #222;
+  padding:6px;
+  border-radius:6px;
+  font-size:12px;
+  color:#ccc;
+  width:260px;
+}
+.desc-box[disabled]{background:transparent;border:none;}
+
+.edit-btn{
+  margin-left:auto;
+  background:#4ea1ff;
+  padding:10px 16px;
+  border:none;border-radius:8px;
+  color:#fff;cursor:pointer;
+}
+
+.top-icons{
+  position:absolute;
+  top:10px;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:0 10px;
+}
+
+.small-btn{
+  width:30px;height:30px;
+  border-radius:50%;
+  background:#1f2937;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;margin-top:20px;
+}
+.box{
+  background:#111a2e;
+  padding:15px;border-radius:12px;
+  text-align:center;
+}
+
+.section{margin-top:25px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  overflow:hidden;
+}
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+}
+.card-title{padding:6px;font-size:12px;}
+
+@media(max-width:768px){
+.container{flex-direction:column;}
+.sidebar{width:100%;height:auto;}
+.grid{grid-template-columns:repeat(2,1fr);}
+.stats{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+<h2>LPPG</h2>
+<a href="index.html">Home</a>
+<a>Profile</a>
+<a href="purchase.html">Orders</a>
+<a href="contact.html">Support</a>
+<a onclick="logout()" style="color:red;">Logout</a>
+</div>
+
+<div class="main">
+
+<div class="profile-header">
+
+<div class="banner" id="banner">
+<div class="icon-btn banner-edit" id="bannerEdit" onclick="uploadBanner()">✎</div>
+</div>
+
+<div class="top-icons">
+<div class="small-btn" id="closeBtn" onclick="toggleEdit()">✖</div>
+<div class="small-btn" id="saveBtn" onclick="saveProfile()">✔</div>
+</div>
+
+<div class="profile-content">
+
+<div class="dp">
+<img id="dpImg" src="https://via.placeholder.com/100">
+<div class="icon-btn dp-edit" id="dpEdit" onclick="uploadDP()">✎</div>
+</div>
+
+<div class="user">
+<h2 id="username">User</h2>
+<input id="usernameInput" class="username-edit">
+<input id="desc" class="desc-box" value="No description" disabled>
+</div>
+
+<button class="edit-btn" onclick="toggleEdit()">Edit Profile</button>
+
+</div>
+</div>
+
+<div class="stats">
+<div class="box">LPPG Points<br><b id="points">0</b></div>
+<div class="box">Game Inventory<br><b id="inventory">0</b></div>
+<div class="box">Cart<br><b id="cart">0</b></div>
+<div class="box">Level<br><b id="level">1</b></div>
+</div>
+
+<div class="section">
+<h3>🎯 Games For You</h3>
+<div class="grid" id="games"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+
+// USER
+let acc=JSON.parse(localStorage.getItem("account"))||{};
+username.innerText=acc.username||"User";
+usernameInput.value=username.innerText;
+
+// PROFILE
+let p=JSON.parse(localStorage.getItem("profile"))||{};
+if(p.dp) dpImg.src=p.dp;
+if(p.banner) banner.style.backgroundImage=`url(${p.banner})`;
+if(p.desc) desc.value=p.desc;
+
+// POINT / INVENTORY / CART
+let pointsVal=parseInt(localStorage.getItem("points")||0);
+points.innerText=pointsVal;
+
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+inventory.innerText=orders.length;
+
+let cartItems=JSON.parse(localStorage.getItem("cartItems")||"[]");
+cart.innerText=cartItems.length;
+
+level.innerText=Math.floor(pointsVal/100)+1;
+
+// 🔥 SMART RECOMMEND (FIXED)
+let data=JSON.parse(localStorage.getItem("userData"))||{views:[],search:[]};
+let pool=[...data.views,...data.search];
+
+// fallback (if empty)
+if(pool.length===0){
+pool=["GTA V","Elden Ring","God of War","Forza Horizon 5","Cyberpunk 2077"];
+}
+
+// shuffle system (changes every open)
+pool.sort(()=>Math.random()-0.5);
+
+let list=[...new Set(pool)].slice(0,8);
+
+let grid=document.getElementById("games");
+grid.innerHTML="";
+
+list.forEach((g,i)=>{
+let div=document.createElement("div");
+div.className="card";
+div.innerHTML=`
+<img src="GLOGO/${(i%120)+1}.jpg">
+<div class="card-title">${g}</div>`;
+grid.appendChild(div);
+});
+
+// EDIT MODE FIX
+let edit=false;
+
+function toggleEdit(){
+edit=!edit;
+
+desc.disabled=!edit;
+
+username.style.display=edit?"none":"block";
+usernameInput.style.display=edit?"block":"none";
+
+dpEdit.style.display=edit?"flex":"none";
+bannerEdit.style.display=edit?"flex":"none";
+
+closeBtn.style.display=edit?"flex":"none";  // FIXED
+saveBtn.style.display=edit?"flex":"none";   // FIXED
+}
+
+// SAVE
+function saveProfile(){
+let p=JSON.parse(localStorage.getItem("profile"))||{};
+p.desc=desc.value;
+p.name=usernameInput.value;
+localStorage.setItem("profile",JSON.stringify(p));
+
+username.innerText=usernameInput.value;
+toggleEdit();
+}
+
+// IMAGE
+function uploadDP(){
+let i=document.createElement("input");
+i.type="file";
+i.onchange=e=>{
+let r=new FileReader();
+r.onload=()=>{dpImg.src=r.result;saveImg("dp",r.result);}
+r.readAsDataURL(e.target.files[0]);
+};
+i.click();
+}
+
+function uploadBanner(){
+let i=document.createElement("input");
+i.type="file";
+i.onchange=e=>{
+let r=new FileReader();
+r.onload=()=>{banner.style.backgroundImage=`url(${r.result})`;saveImg("banner",r.result);}
+r.readAsDataURL(e.target.files[0]);
+};
+i.click();
+}
+
+function saveImg(type,val){
+let p=JSON.parse(localStorage.getItem("profile"))||{};
+p[type]=val;
+localStorage.setItem("profile",JSON.stringify(p));
+}
+
+// LOGOUT
+function logout(){
+localStorage.removeItem("user");
+location.href="index.html";
+}
+
+</script>
+
+</body>
+</html>
