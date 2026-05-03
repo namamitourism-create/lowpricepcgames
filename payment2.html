@@ -6,6 +6,17 @@
 <title>Secure Payment</title>
 
 <style>
+
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}
+  
 *{box-sizing:border-box;}
 
 body{
@@ -236,6 +247,11 @@ Payment Completed
 
 <script>
 
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+}, {passive:false});
+  
 let cart = JSON.parse(localStorage.getItem("checkoutCart")) || [];
 let total = 0;
 
