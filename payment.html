@@ -236,9 +236,28 @@ document.getElementById("doneBtn").style.display="block";
 }
 
 function completeOrder(){
+
 let billing=JSON.parse(localStorage.getItem("billing"));
 let orderID=localStorage.getItem("orderID");
 
+// 🔥 SAVE PURCHASE (MOST IMPORTANT)
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push({
+  name: order.name,
+  price: order.price,
+  img: order.img,
+  date: new Date().toLocaleDateString(),
+  status: "Completed",
+  orderID: orderID
+});
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+// REMOVE CURRENT ORDER
+localStorage.removeItem("order");
+
+// 🔥 WHATSAPP MESSAGE (UNCHANGED)
 let msg=`Hello Low Price PC Games,
 Payment Successful✅
 
@@ -256,6 +275,12 @@ Address: ${billing.address}
 Please process the delivery`;
 
 window.open(`https://api.whatsapp.com/send?phone=919395579036&text=${encodeURIComponent(msg)}`);
+
+// 🔥 REDIRECT TO PURCHASE PAGE
+setTimeout(()=>{
+  window.location.href = "purchase.html";
+},1000);
+
 }
 
 </script>
