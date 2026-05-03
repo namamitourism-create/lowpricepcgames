@@ -103,6 +103,15 @@ to{opacity:1;transform:translateY(0);}
   .price{font-size:15px;}
   .btn{padding:8px;font-size:12px;}
 }
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}  
 </style>
 </head>
 
@@ -139,6 +148,11 @@ to{opacity:1;transform:translateY(0);}
 
 <script>
 
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+}, {passive:false});
+  
 // HERO
 const track=document.getElementById("heroTrack");
 for(let i=1;i<=5;i++){
