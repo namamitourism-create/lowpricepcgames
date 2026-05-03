@@ -6,6 +6,17 @@
 <title>Deals - Low Price PC Games</title>
 
 <style>
+
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 body{background:#0b1220;color:#fff;overflow-x:hidden;}
 
@@ -219,6 +230,11 @@ nav a:hover{color:#fff;}
 
 <script>
 
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+}, {passive:false});  
+  
 // HERO (same)
 const track=document.getElementById("heroTrack");
 for(let i=1;i<=4;i++){
