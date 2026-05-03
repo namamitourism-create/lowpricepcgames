@@ -6,6 +6,17 @@
 <title>Early Spring Deal</title>
 
 <style>
+
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 
 body{
@@ -223,6 +234,11 @@ Offer ends in: 22Hrs : 00mins : 00sec
 
 <script>
 
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+}, {passive:false});
+  
 let totalSeconds = 18 * 12 * 20;
 
 function updateTimer(){
