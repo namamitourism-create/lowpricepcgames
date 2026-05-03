@@ -444,9 +444,9 @@ let name = card.querySelector("h3").innerText;
 let price = parseInt(card.querySelector(".price").innerText.replace("₹",""));
 let img = card.querySelector("img").getAttribute("src");
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// 🔥 FIXED STORAGE KEY
+let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-// check existing
 let existing = cart.find(item => item.name === name);
 
 if(existing){
@@ -460,7 +460,9 @@ if(existing){
   });
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cartItems", JSON.stringify(cart));
+
+// show red dot
 document.getElementById("cartDot").style.display="block";
 }
 
