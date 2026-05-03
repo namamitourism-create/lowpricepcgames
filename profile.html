@@ -128,8 +128,8 @@ body{
 
   .banner{
   height:140px;
+  background-position: center 30%;
   }
-
   
   /* USERNAME BIG */
   .user h2{
@@ -361,9 +361,27 @@ usernameInput.value=username.innerText;
 
 // PROFILE
 let p=JSON.parse(localStorage.getItem("profile"))||{};
-if(p.dp) dpImg.src=p.dp;
-if(p.banner) banner.style.backgroundImage=`url(${p.banner})`;
-if(p.desc) desc.value=p.desc;
+
+// 🔥 DEFAULT IMAGES
+const defaultDP = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+const defaultBanner = "linear-gradient(135deg,#2c2c2c,#1a1a1a)";
+
+// PROFILE PIC
+if(p.dp){
+  dpImg.src = p.dp;
+}else{
+  dpImg.src = defaultDP;
+}
+
+// BANNER
+if(p.banner){
+  banner.style.backgroundImage = `url(${p.banner})`;
+}else{
+  banner.style.background = defaultBanner;
+}
+
+// DESCRIPTION
+if(p.desc) desc.value = p.desc;
 
 // DATA
 let pointsVal=parseInt(localStorage.getItem("points")||0);
@@ -382,12 +400,16 @@ let data=JSON.parse(localStorage.getItem("userData"))||{views:[],search:[]};
 let pool=[...data.views,...data.search];
 
 if(pool.length===0){
-pool=["GTA V","Elden Ring","God of War","Forza Horizon 5"];
+  pool=[
+    "GTA V","Elden Ring","God of War","Forza Horizon 5",
+    "Cyberpunk 2077","Red Dead Redemption 2","Spider-Man 2","Far Cry 6",
+    "Battlefield 2042","Assassin’s Creed Valhalla","The Witcher 3","Resident Evil 4 Remake"
+  ];
 }
 
 pool.sort(()=>Math.random()-0.5);
 
-let list=[...new Set(pool)].slice(0,8);
+let list=[...new Set(pool)].slice(0,12);
 
 // 🔥 GAME NAME → IMAGE MATCH (WITH GLOGO + GLOGO2)
 function getGameImage(name){
