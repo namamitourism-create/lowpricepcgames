@@ -13,11 +13,16 @@ header{
   background:#0a0f1a;
   padding:15px 40px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  gap:12px;
 }
 .logo{color:#4ea1ff;font-size:22px;font-weight:bold;}
-.right-group{display:flex;align-items:center;gap:15px;}
+.right-group{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-left:auto;
+}
 
 nav a{color:#ccc;margin:0 8px;text-decoration:none;transition:0.3s;}
 nav a:hover{color:#4ea1ff;}
@@ -83,6 +88,55 @@ from{opacity:0;transform:translateY(20px);}
 to{opacity:1;transform:translateY(0);}
 }
 
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+  margin-right:10px;
+}
+
+.side-menu{
+  position:fixed;
+  top:0;
+  left:-260px;
+  width:240px;
+  height:100%;
+  background:#0a0f1a;
+  display:flex;
+  flex-direction:column;
+  padding:20px;
+  gap:18px;
+  transition:0.35s;
+  z-index:999;
+}
+
+.side-menu a{
+  color:#cbd5e1;
+  text-decoration:none;
+}
+
+.side-menu a:hover{
+  color:#4ea1ff;
+}
+
+.side-menu.active{
+  left:0;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  opacity:0;
+  pointer-events:none;
+  transition:0.3s;
+  z-index:998;
+}
+
+.overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
 /* MOBILE FIX */
 @media(max-width:768px){
   header{padding:10px 12px;}
@@ -103,21 +157,13 @@ to{opacity:1;transform:translateY(0);}
   .price{font-size:15px;}
   .btn{padding:8px;font-size:12px;}
 }
-*{
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-img{
-  pointer-events: none;
-}  
 </style>
 </head>
 
 <body>
 
 <header>
+<div class="menu-btn" onclick="openMenu()">☰</div>
 <div class="logo">LOW PRICE PC GAMES</div>
 <div class="right-group">
 <nav>
@@ -130,6 +176,15 @@ img{
 </div>
 </header>
 
+<div id="sideMenu" class="side-menu">
+  <a id="authBtn1"></a>
+  <a id="authBtn2"></a>
+  <a id="purchaseBtn">Purchase History</a>
+  <a id="pointBtn">LPPG Point Shop</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
 <section class="hero">
 <div class="hero-track" id="heroTrack"></div>
 <div class="hero-content">
@@ -148,11 +203,6 @@ img{
 
 <script>
 
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("touchstart", e => {
-  if(e.touches.length > 1) e.preventDefault();
-}, {passive:false});
-  
 // HERO
 const track=document.getElementById("heroTrack");
 for(let i=1;i<=5;i++){
@@ -185,7 +235,7 @@ const gameData = [
 {title:"Black Myth: Wukong",desc:"Action RPG inspired by Journey to the West."},
 {title:"Call of Duty: Modern Warfare II (2022)",desc:"Tactical shooter with cinematic campaign."},
 {title:"Call of Duty: Modern Warfare III (2023)",desc:"Fast-paced FPS with advanced mechanics."},
-{title:"Nioh 3",desc:"Hardcore samurai RPG with deep combat."},
+{title:"Nioh",desc:"Hardcore samurai RPG with deep combat."},
 {title:"Avatar: Frontiers of Pandora",desc:"Open-world adventure on Pandora."},
 {title:"Call of Duty: Black Ops Cold War",desc:"Cold War shooter with zombies mode."},
 {title:"Battlefield 6",desc:"Large-scale warfare shooter."},
@@ -279,40 +329,13 @@ const gameData = [
 {title:"Just Cause 4 Reloaded",desc:"Open-world action chaos."},
 {title:"Just Cause 3",desc:"Explosive sandbox action game."},
 {title:"Need for Speed Unbound",desc:"Arcade street racing with stylized visuals, police chases, car customization, and high-speed open-world gameplay."},
-{title:"Need for Speed Heat",desc:"Day-night street racing with legal events by day and intense illegal races by night, featuring deep car tuning and pursuits."},
-{title:"Call of Duty Modern Warfare (2019)",desc:"Realistic modern combat shooter with intense campaign and multiplayer."},
-{title:"Call of Duty Vanguard",desc:"WWII shooter with cinematic campaign and fast-paced multiplayer."},
-{title:"Call of Duty WWII",desc:"Classic World War II experience with grounded combat and story-driven campaign."},
-{title:"Call of Duty Black Ops 6",desc:"Next-gen Black Ops with advanced mechanics, campaign, and multiplayer."},
-{title:"Call of Duty MW2 Remastered",desc:"Remastered campaign of MW2 with enhanced visuals and gameplay."},
-{title:"Call of Duty MW Remastered",desc:"Legendary COD4 remastered with improved graphics and multiplayer."},
-{title:"Halo Infinite",desc:"Open-world sci-fi shooter with Master Chief and epic battles."},
-{title:"Red Dead Redemption 1",desc:"Western open-world story of outlaws and survival."},
-{title:"Dead Island 2",desc:"Zombie survival action with brutal combat and co-op gameplay."},
-{title:"Starfield",desc:"Relaxing farming simulator with crafting, fishing, and village life."},
-{title:"Lies of P",desc:"Soulslike action RPG inspired by Pinocchio with dark and challenging combat."},
-{title:"Star Wars Jedi Survivor",desc:"Story-driven action adventure with lightsaber combat and exploration."},
-{title:"Mortal Kombat 1",desc:"Brutal fighting game with cinematic story and intense battles."},
-{title:"Tekken 8",desc:"Next-gen fighting game with powerful combos and competitive gameplay."},
-{title:"Alan Wake 2",desc:"Psychological horror with deep storytelling and survival elements."},
-{title:"Death Stranding",desc:"Open-world delivery adventure with unique traversal and story."},
-{title:"NBA 2K24",desc:"Realistic basketball simulation with career mode and online play."},
-{title:"The Division 2",desc:"Online open-world shooter with tactical combat and co-op missions."},
-{title:"Diablo IV",desc:"Dark fantasy action RPG with loot-based progression and online world."},
-{title:"Assetto Corsa Competizione",desc:"Hardcore racing simulator focused on realistic driving physics."},
-{title:"Dark Souls III",desc:"Challenging action RPG with deep combat and dark world design."},
-{title:"Sekiro Shadows Die Twice",desc:"Fast-paced samurai combat with stealth and precise mechanics."},
-{title:"Devil May Cry 5",desc:"Stylish action game with fast combat and combo-based gameplay."},
-{title:"Final Fantasy XVI",desc:"Epic fantasy RPG with cinematic story and real-time combat."},
-{title:"Skull and Bones",desc:"Pirate naval combat game with open-sea battles and exploration."},
-{title:"S.T.A.L.K.E.R. 2",desc:"Post-apocalyptic survival shooter with immersive world and horror elements."},
-{title:"DOOM The Dark Ages",desc:"Medieval-themed DOOM with brutal combat and demon-slaying action."}
+{title:"Need for Speed Heat",desc:"Day-night street racing with legal events by day and intense illegal races by night, featuring deep car tuning and pursuits."}
 ];
 
 // RENDER
 const container=document.getElementById("gamesContainer");
 
-for(let i=1;i<=129;i++){
+for(let i=1;i<=102;i++){
 let game=document.createElement("div");
 game.className="game";
 
@@ -423,6 +446,60 @@ let d=g.querySelector("p").innerText.toLowerCase();
 g.style.display=(t.includes(q)||d.includes(q))?"flex":"none";
 });
 });
+function openMenu(){
+  document.getElementById("sideMenu").classList.add("active");
+  document.getElementById("overlay").classList.add("active");
+}
+
+function closeMenu(){
+  document.getElementById("sideMenu").classList.remove("active");
+  document.getElementById("overlay").classList.remove("active");
+}
+function updateMenu(){
+  const user = localStorage.getItem("user");
+
+  const btn1 = document.getElementById("authBtn1");
+  const btn2 = document.getElementById("authBtn2");
+
+  const purchase = document.getElementById("purchaseBtn");
+  const point = document.getElementById("pointBtn");
+
+  if(user){
+    // ✅ LOGGED IN
+    btn1.innerText = "Profile";
+    btn1.href = "profile.html";
+
+    btn2.style.display = "none";
+
+    purchase.href = "purchase.html";
+    purchase.style.opacity = "1";
+    purchase.style.pointerEvents = "auto";
+
+    point.href = "pointstore.html";
+    point.style.opacity = "1";
+    point.style.pointerEvents = "auto";
+
+  }else{
+    // ❌ NOT LOGGED IN
+    btn1.innerText = "Sign In";
+    btn1.href = "signin.html";
+
+    btn2.innerText = "Sign Up";
+    btn2.href = "login.html";
+    btn2.style.display = "block";
+
+    // 🔒 LOCK BUTTONS
+    purchase.removeAttribute("href");
+    purchase.style.opacity = "0.5";
+    purchase.style.pointerEvents = "none";
+
+    point.removeAttribute("href");
+    point.style.opacity = "0.5";
+    point.style.pointerEvents = "none";
+  }
+}
+
+updateMenu();
 
 </script>
 
