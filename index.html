@@ -35,35 +35,48 @@ nav a:hover{color:#4ea1ff;}
 @media(max-width:768px){
 
   header{
-    flex-wrap:wrap;
-    padding:12px 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 12px;
+  }
+
+  .menu-btn{
+    font-size:20px;
+    margin-right:6px;
   }
 
   .logo{
-    width:100%;
-    font-size:16px;
+    font-size:14px;
+    white-space:nowrap;
   }
 
+  /* CENTER NAV (YOUR RED MARK AREA) */
   nav{
-    width:100%;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
     display:flex;
-    justify-content:flex-start;
-    gap:12px;
-    margin-top:6px;
+    gap:18px;
   }
 
   nav a{
     font-size:13px;
+    white-space:nowrap;
+  }
+
+  /* RIGHT SIDE */
+  .right-group{
+    display:flex;
+    align-items:center;
+    gap:6px;
   }
 
   .search-box{
-    margin-left:auto;
-    width:120px;
+    width:90px;
+    padding:6px;
   }
 
-  .cart-icon{
-    margin-left:8px;
-  }
 }
   
 /* HERO */
