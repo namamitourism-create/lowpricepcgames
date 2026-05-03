@@ -6,6 +6,16 @@
 <title>Low Price PC Games</title>
 
 <style>
+
+.logout{
+  color:#ff3b3b;
+  margin-top:10px;
+}
+
+.logout:hover{
+  background:rgba(255,59,59,0.1);
+}  
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 body{background:#0b1220;color:#fff;scroll-behavior:smooth;overflow-x:hidden;}
 
@@ -193,6 +203,9 @@ to{opacity:1;transform:translateY(0);}
   <a id="purchaseBtn">Purchase History</a>
   <a id="pointBtn">LPPG Point Shop</a>
   <a href="contact.html">Contact Us</a>
+</div>
+  <div id="logoutBtn" class="menu-item logout" onclick="logoutUser()" style="display:none;">
+  Logout
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
@@ -425,6 +438,21 @@ localStorage.setItem("cart", JSON.stringify(cart));
 document.getElementById("cartDot").style.display="block";
 }
 
+/* SHOW LOGOUT ONLY IF LOGGED IN */
+if(localStorage.getItem("user")==="yes"){
+  document.getElementById("logoutBtn").style.display="block";
+}else{
+  document.getElementById("logoutBtn").style.display="none";
+}
+
+/* LOGOUT FUNCTION */
+function logoutUser(){
+  localStorage.removeItem("user");
+  localStorage.removeItem("userEmail");
+
+  window.location.href="index.html";
+}  
+  
 // 🔥 FIXED BUY FUNCTION (ONLY CHANGE)
 function buyGame(e,name,price,base,disc,index){
   e.stopPropagation();
