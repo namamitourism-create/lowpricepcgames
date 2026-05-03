@@ -21,9 +21,14 @@ img{
 }
 
 html,body{
-  overflow-y:auto;
+  overflow-y:scroll;
   overflow-x:hidden;
+  height:auto;
 }
+  
+.main{
+  min-height:100vh;
+}  
 
 body{
   -webkit-overflow-scrolling: touch;
@@ -119,9 +124,7 @@ body{background:#060d1a;color:#fff;}
   height:140px;
   }
 
-  .profile-content{
-  margin-top:-60px;
-  }
+  
   /* USERNAME BIG */
   .user h2{
     font-size:20px;
@@ -393,9 +396,16 @@ let grid=document.getElementById("games");
 list.forEach((g,i)=>{
 let div=document.createElement("div");
 div.className="card";
+
+div.onclick = function(){
+  localStorage.setItem("selectedGame", g);
+  window.location.href = "index.html";
+};
+
 div.innerHTML=`
 <img src="${getGameImage(g)}">
 <div class="card-title">${g}</div>`;
+
 grid.appendChild(div);
 });
 
