@@ -391,22 +391,30 @@ for(let i = gameData.length - 1; i > 0; i--){
   let j = Math.floor(Math.random() * (i + 1));
   [gameData[i], gameData[j]] = [gameData[j], gameData[i]];
 }  
+
+let currentIndex = 0;  
   
 // RENDER
 const container=document.getElementById("gamesContainer");
   
-for(let i=1;i<=102;i++){
+function renderGames(){
+
+container.innerHTML = ""; // clear
+
+for(let i=0;i<102;i++){
+
+let dataIndex = (i + currentIndex) % gameData.length;
+
 let game=document.createElement("div");
 game.className="game";
-    
-let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
+
+let title=gameData[dataIndex]?.title || `Game ${i+1}`;
+let desc=gameData[dataIndex]?.desc || "High-quality PC game.";
 
 game.onclick = function(){
   trackGame(title);
-};  
-  
-let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game."  
-  
+};
+
 let r=Math.random();
 let stars=r<0.5?"★★★★☆":r<0.8?"★★★☆☆":r<0.95?"★★★★⯪":"★★★★★";
 let reviews=(stars==="★★★★★"||stars==="★★★★⯪")?Math.floor(Math.random()*500)+300:Math.floor(Math.random()*250)+30;
@@ -416,17 +424,42 @@ let finalPrice=prices[Math.floor(Math.random()*3)];
 let discount=Math.floor(Math.random()*40)+40;
 let basePrice=Math.ceil((finalPrice*100/(100-discount))/100)*100;
 
-// 🔥 SUPER SMOOTH (NO ONE WILL NOTICE)
+game.innerHTML=`
+<img src="${
+i<=99 ? 'GLOGO/'+(i+1)+'.jpg' :
+i<=198 ? 'GLOGO2/'+(i+1)+'.jpg' :
+i<=297 ? 'GLOGO3/'+(i+1)+'.jpg' :
+'GLOGO/'+(i+1)+'.jpg'
+}">
+<h3>${title}</h3>
+<p>${desc}</p>
+
+<div class="stars">${stars}<span class="reviews">(${reviews})</span></div>
+
+<div class="price-box">
+<div class="price">₹${finalPrice}</div>
+<div class="old-price">₹${basePrice}</div>
+<div class="discount">-${discount}%</div>
+</div>
+
+<div class="actions">
+<button class="btn buy" onclick="buyGame(event,'${title}',${finalPrice},${basePrice},${discount},${i+1})">BUY NOW</button>
+<button class="btn cart" onclick="addToCart(event)">ADD TO CART</button>
+</div>
+`;
+
+container.appendChild(game);
+}
+}
+
+renderGames();  
+
 setInterval(()=>{
-  let container = document.getElementById("gamesContainer");
-
-  let first = container.firstElementChild;
-
-  if(!first) return;
-
-  container.appendChild(first);
-
-},12000);
+  currentIndex += 2;
+  renderGames();
+},15000);
+  
+// 🔥 SUPER SMOOTH (NO ONE WILL NOTICE)
   
 game.innerHTML=`
 <img src="${
