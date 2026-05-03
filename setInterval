@@ -451,50 +451,18 @@ i<=297 ? 'GLOGO3/'+(i+1)+'.jpg' :
 container.appendChild(game);
 }
 }
-
+// observer apply after render
+  
 renderGames();  
 
-setInterval(()=>{
-  currentIndex += 2;
-  renderGames();
-},15000);
+
   
-// 🔥 SUPER SMOOTH (NO ONE WILL NOTICE)
-  
-game.innerHTML=`
-<img src="${
-i<=99 ? 'GLOGO/'+i+'.jpg' :
-i<=198 ? 'GLOGO2/'+i+'.jpg' :
-i<=297 ? 'GLOGO3/'+i+'.jpg' :
-'GLOGO/'+i+'.jpg'
-}">
-<h3>${title}</h3>
-<p>${desc}</p>
-
-<div class="stars">${stars}<span class="reviews">(${reviews})</span></div>
-
-<div class="price-box">
-<div class="price">₹${finalPrice}</div>
-<div class="old-price">₹${basePrice}</div>
-<div class="discount">-${discount}%</div>
-</div>
-
-<div class="actions">
-<button class="btn buy" onclick="buyGame(event,'${title}',${finalPrice},${basePrice},${discount},${i})">BUY NOW</button>
-<button class="btn cart" onclick="addToCart(event)">ADD TO CART</button>
-</div>
-`;
-
-container.appendChild(game);
-}
-
 // SCROLL
 const observer=new IntersectionObserver(entries=>{
 entries.forEach(e=>{
 if(e.isIntersecting){e.target.classList.add("show");}
 });
 });
-document.querySelectorAll(".game").forEach(g=>observer.observe(g));
 
 // CART
 function addToCart(e){
@@ -636,7 +604,15 @@ function trackGame(name){
   localStorage.setItem("userData", JSON.stringify(data));
 }
 updateMenu();
+// 🔥 SMOOTH ROTATION (NO FLICKER)
+setInterval(()=>{
+  let container = document.getElementById("gamesContainer");
+  let first = container.firstElementChild;
 
+  if(first){
+    container.appendChild(first);
+  }
+},20000);
 </script>
 
 </body>
