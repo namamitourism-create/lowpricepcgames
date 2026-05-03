@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LPPG Point Store</title>
+
+<style>
+*{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+img{pointer-events:none;}
+
+body{
+  margin:0;
+  font-family:system-ui;
+  background:linear-gradient(135deg,#071426,#0a1f3d,#0d2a52);
+  color:#fff;
+  width:100%;
+  overflow-x:hidden;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 20px;
+  box-sizing:border-box;
+  width:100%;
+
+  position:fixed;      /* 🔥 FIX */
+  top:0;
+  left:0;
+  width:100%;
+
+  z-index:1000;
+
+  background:rgba(10,25,50,0.25);   /* transparent */
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.coin{color:#9bdcff;}
+.home-btn{cursor:pointer;}
+
+.container{
+  width:100%;
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  width:100%;
+}
+
+.card{
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+
+  border-radius:14px;
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,0.12);
+
+  transition:0.4s;
+}
+
+.card:hover{
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:
+    0 0 20px rgba(80,200,255,0.25),
+    0 0 40px rgba(80,200,255,0.15);
+}
+
+.card img{
+  width:100%;
+  aspect-ratio:1/1.4;
+  object-fit:cover;
+}
+
+.title{padding:8px;font-size:13px;}
+.price{
+  padding:0 8px;
+  color:#FFD700;        /* Yellow */
+  font-size:13px;
+  font-weight:bold;     /* Bold */
+  text-shadow:0 0 8px rgba(255,215,0,0.6); /* Glow */
+}
+
+.btn{
+  margin:10px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(90deg,#4ea1ff,#9bdcff);
+  color:#000;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  body{
+  overflow-x:hidden;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="coin">🪙 <span id="points">0</span> LPPG</div>
+  <div class="home-btn" onclick="location.href='index.html'">Home</div>
+</div>
+
+<div class="container">
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+
+document.addEventListener("contextmenu",e=>e.preventDefault());
+
+document.getElementById("points").innerText = localStorage.getItem("points")||0;
+
+// 🔥 FULL GAME LIST (ALL 129)
+const games = [
+"Assassin’s Creed Shadows","EA Sports FC 26","Mafia: The Old Country","Silent Hill F","Black Myth: Wukong",
+"Call of Duty: Modern Warfare II (2022)","Call of Duty: Modern Warfare III (2023)","Nioh","Avatar: Frontiers of Pandora",
+"Call of Duty: Black Ops Cold War","Battlefield 6","Crimson Desert","Resident Evil: Requiem","Forza Horizon 6",
+"Death Stranding 2","Forza Horizon 5","Cricket 26","F1 25","Microsoft Flight Simulator 2020","Microsoft Flight Simulator 2024",
+"WWE 2K26","Rust","Pragmata","Grand Theft Auto V","Red Dead Redemption 2","The Last of Us Part II Remastered",
+"The Last of Us Part I","Euro Truck Simulator 2","Far Cry 6","Far Cry New Dawn","Far Cry 5","Far Cry 4","Far Cry 3",
+"Dying Light: The Beast","Forza Horizon 4","MotoGP 2026","Resident Evil Biohazared","Kingdom Come Deliverance 2",
+"Resident Evil Village","Ghost of tsushima director's cut","Street Fighter 6","EA Sports FC 25","EA Sports FC 24",
+"FIFA 23","FIFA 22","FIFA 21","FIFA 20","SnowRunner","American Truck Simulator","Farming Simulator 25",
+"Farming Simulator 22","Dying Light 2","Dying Light","Days Gone","No man's sky","Squad","ARMA 3",
+"Resident Evil 2 Remake","Resident Evil 4 Remake","Outlast","Cities Skylines 2","Subnautica",
+"Assassin’s Creed Origins","Assassin’s Creed Odyssey","Assassin’s Creed Valhalla","Assassin’s Creed Mirage",
+"Mafia III","Mafia II","Watch Dogs Legion","Watch Dogs 2","Watch Dogs","Sleeping Dogs",
+"Show of the tomb raider","Rise of the Tomb Raider","Hitman 2","Hitman World of assasiation",
+"Farming Simulator 23","Battlefield 2042","Battlefield 5","Battlefield 1","Control",
+"Cyberpunk 2077","Elden Ring","The Crew 2","The Witcher 3","Train Sim World 6",
+"Assetto Corsa EVO","Forza Motorsport","Spider-Man 2","Spider-Man Remastered",
+"God of War","God of War Ragnarok","Uncharted 4","Uncharted Lost Legacy",
+"Horizon Forbidden West","Horizon Zero Dawn","Baldur’s Gate 3","Metro 2033 Exodus",
+"Just Cause 4 Reloaded","Just Cause 3","Need for Speed Unbound","Need for Speed Heat",
+"Call of Duty: Modern Warfare (2019)","Call of Duty: Vanguard","Call of Duty: WWII",
+"Call of Duty: Black Ops 6","Call of Duty: Modern Warfare 2 Remastered",
+"Call of Duty: Modern Warfare Remastered","Halo Infinite","Red Dead Redemption",
+"Dead Island 2","Starfield","Lies of P","Star Wars Jedi: Survivor",
+"Mortal Kombat 1","Tekken 8","Alan Wake 2","Death Stranding",
+"NBA 2K24","The Division 2","Diablo IV","Assetto Corsa Competizione",
+"Dark Souls III","Sekiro: Shadows Die Twice","Devil May Cry 5",
+"Final Fantasy XVI","Skull and Bones","S.T.A.L.K.E.R. 2","DOOM: The Dark Ages"
+];
+
+// 🔥 YOUR FIXED SEQUENCE
+const sequence = [98,1,36,72,5,113,44,27,120,9,65,84,2,57,101,18,76,33,109,6,88,47,14,123,39,70,25,95,52,111,3,68,90,12,54,80,21,107,30,62,99,8,41,117,16,74,29,103,50,85,7,93,24,119,34,66,108,10,58,82];
+
+// 🔥 POPULAR GAMES (VERY HIGH)
+const veryPopular = [
+"Grand Theft Auto V","Red Dead Redemption 2","Elden Ring",
+"God of War Ragnarok","Spider-Man 2","Cyberpunk 2077"
+];
+
+// 🔥 HIGH POPULAR
+const highPopular = [
+"Forza Horizon 5","Call of Duty: Modern Warfare III (2023)",
+"Battlefield 2042","The Witcher 3","Horizon Forbidden West"
+];
+
+// 🔥 PRICE MAP
+let priceMap = JSON.parse(localStorage.getItem("priceMap")) || {};
+
+function getPrice(name){
+
+  if(priceMap[name]) return priceMap[name];
+
+  let price;
+
+  if(veryPopular.includes(name)){
+    price = 2000;
+  }
+  else if(highPopular.includes(name)){
+    price = [1200,1500,1800][Math.floor(Math.random()*3)];
+  }
+  else{
+    price = [500,800,1000][Math.floor(Math.random()*3)];
+  }
+
+  priceMap[name]=price;
+  localStorage.setItem("priceMap",JSON.stringify(priceMap));
+
+  return price;
+}
+
+// IMAGE
+function getImage(num){
+  if(num<=100) return `GLOGO/${num}.jpg`;
+  return `GLOGO2/${num}.jpg`;
+}
+
+// RENDER
+let grid=document.getElementById("grid");
+
+sequence.forEach(num=>{
+
+  let name = games[num-1];
+
+  let div=document.createElement("div");
+  div.className="card";
+
+  div.innerHTML=`
+  <img src="${getImage(num)}">
+  <div class="title">${name}</div>
+  <div class="price">${getPrice(name)} LPPG</div>
+  <button class="btn" onclick="claim('${name}')">Claim Now</button>
+  `;
+
+  grid.appendChild(div);
+
+});
+
+function claim(name){
+  localStorage.setItem("claimGame",name);
+  location.href="claim.html";
+}
+
+</script>
+
+</body>
+</html>
