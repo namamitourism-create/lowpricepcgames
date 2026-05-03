@@ -365,7 +365,10 @@ localStorage.setItem("orders", JSON.stringify(orders));
 // CLEAR CART + TEMP DATA
 localStorage.removeItem("checkoutCart");
 localStorage.removeItem("orderID");
-
+// CLEAR CART + TEMP DATA
+localStorage.removeItem("checkoutCart");
+localStorage.removeItem("cart");   // 🔥 ADD THIS LINE
+localStorage.removeItem("orderID");
 // 🔥 WHATSAPP (UNCHANGED)
 let items="";
 cart.forEach(i=>items+=`\n🎮 ${i.name} × ${i.qty}`);
