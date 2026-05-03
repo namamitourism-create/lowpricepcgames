@@ -6,6 +6,18 @@
 <title>Purchase History</title>
 
 <style>
+
+/* 🔒 DISABLE COPY + LONG PRESS */
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}  
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 body{background:#060d1a;color:#fff;}
 
@@ -197,8 +209,18 @@ function logout(){
   localStorage.removeItem("user");
   location.href="index.html";
 }
+// 🔒 DISABLE RIGHT CLICK
+document.addEventListener("contextmenu", e => e.preventDefault());
 
+// 🔒 DISABLE LONG PRESS (MOBILE)
+document.addEventListener("touchstart", function(e){
+  if(e.touches.length > 1){
+    e.preventDefault();
+  }
+}, {passive:false});
+
+// 🔒 DISABLE IMAGE DRAG
+document.addEventListener("dragstart", e => e.preventDefault());
 </script>
-
 </body>
 </html>
