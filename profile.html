@@ -2,10 +2,35 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 🔥 FORCE DESKTOP SCALE -->
+<meta name="viewport" content="width=1200, initial-scale=0.35, maximum-scale=0.35, user-scalable=no">
+
 <title>Profile</title>
 
 <style>
+
+/* 🔥 LOCK INTERACTION */
+*{
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+img{
+  pointer-events:none;
+}
+
+html,body{
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+body{
+  -webkit-overflow-scrolling: touch;
+}
+
+/* NORMAL CSS (UNCHANGED LOOK) */
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 body{background:#060d1a;color:#fff;}
 .container{display:flex;}
@@ -140,12 +165,6 @@ body{background:#060d1a;color:#fff;}
 }
 .card-title{padding:6px;font-size:12px;}
 
-@media(max-width:768px){
-.container{flex-direction:column;}
-.sidebar{width:100%;height:auto;}
-.grid{grid-template-columns:repeat(2,1fr);}
-.stats{grid-template-columns:repeat(2,1fr);}
-}
 </style>
 </head>
 
@@ -210,6 +229,12 @@ body{background:#060d1a;color:#fff;}
 
 <script>
 
+// 🔥 BLOCK RIGHT CLICK + LONG PRESS
+document.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener("touchstart", e=>{
+  if(e.touches.length>1) e.preventDefault();
+},{passive:false});
+
 // USER
 let acc=JSON.parse(localStorage.getItem("account"))||{};
 username.innerText=acc.username||"User";
@@ -221,7 +246,7 @@ if(p.dp) dpImg.src=p.dp;
 if(p.banner) banner.style.backgroundImage=`url(${p.banner})`;
 if(p.desc) desc.value=p.desc;
 
-// POINT / INVENTORY / CART
+// DATA
 let pointsVal=parseInt(localStorage.getItem("points")||0);
 points.innerText=pointsVal;
 
@@ -233,22 +258,19 @@ cart.innerText=cartItems.length;
 
 level.innerText=Math.floor(pointsVal/100)+1;
 
-// 🔥 SMART RECOMMEND (FIXED)
+// RECOMMEND
 let data=JSON.parse(localStorage.getItem("userData"))||{views:[],search:[]};
 let pool=[...data.views,...data.search];
 
-// fallback (if empty)
 if(pool.length===0){
-pool=["GTA V","Elden Ring","God of War","Forza Horizon 5","Cyberpunk 2077"];
+pool=["GTA V","Elden Ring","God of War","Forza Horizon 5"];
 }
 
-// shuffle system (changes every open)
 pool.sort(()=>Math.random()-0.5);
 
 let list=[...new Set(pool)].slice(0,8);
 
 let grid=document.getElementById("games");
-grid.innerHTML="";
 
 list.forEach((g,i)=>{
 let div=document.createElement("div");
@@ -259,7 +281,7 @@ div.innerHTML=`
 grid.appendChild(div);
 });
 
-// EDIT MODE FIX
+// EDIT MODE
 let edit=false;
 
 function toggleEdit(){
@@ -273,8 +295,8 @@ usernameInput.style.display=edit?"block":"none";
 dpEdit.style.display=edit?"flex":"none";
 bannerEdit.style.display=edit?"flex":"none";
 
-closeBtn.style.display=edit?"flex":"none";  // FIXED
-saveBtn.style.display=edit?"flex":"none";   // FIXED
+closeBtn.style.display=edit?"flex":"none";
+saveBtn.style.display=edit?"flex":"none";
 }
 
 // SAVE
@@ -283,9 +305,7 @@ let p=JSON.parse(localStorage.getItem("profile"))||{};
 p.desc=desc.value;
 p.name=usernameInput.value;
 localStorage.setItem("profile",JSON.stringify(p));
-
-username.innerText=usernameInput.value;
-toggleEdit();
+location.reload();
 }
 
 // IMAGE
@@ -317,7 +337,6 @@ p[type]=val;
 localStorage.setItem("profile",JSON.stringify(p));
 }
 
-// LOGOUT
 function logout(){
 localStorage.removeItem("user");
 location.href="index.html";
