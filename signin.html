@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+
+body{
+  background:#0b1220;
+  color:#fff;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* WRAPPER */
+.wrapper{
+  width:380px;
+}
+
+/* BRAND */
+.brand{
+  text-align:center;
+  margin-bottom:30px;
+}
+.brand h1{
+  color:#4ea1ff;
+  font-size:20px;
+  font-weight:700;
+}
+.brand p{
+  color:#9ca3af;
+  font-size:12px;
+}
+
+/* CARD */
+.card{
+  background:rgba(17,26,46,0.85);
+  backdrop-filter:blur(14px);
+  border-radius:16px;
+  padding:28px;
+  border:1px solid rgba(255,255,255,0.05);
+  box-shadow:0 30px 70px rgba(0,0,0,0.7);
+}
+
+/* TITLE */
+.title{
+  font-size:17px;
+  font-weight:600;
+  margin-bottom:20px;
+}
+
+/* LABEL */
+.label{
+  font-size:12px;
+  color:#9ca3af;
+  margin-bottom:5px;
+}
+
+/* INPUT */
+.input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #1f2a44;
+  background:#0f172a;
+  color:#fff;
+  margin-bottom:16px;
+  transition:0.2s;
+}
+
+.input:focus{
+  border-color:#4ea1ff;
+  box-shadow:0 0 0 2px rgba(78,161,255,0.2);
+  outline:none;
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,#4ea1ff,#2563eb);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(78,161,255,0.3);
+}
+
+/* ERROR */
+.error{
+  color:#ff3b3b;
+  font-size:12px;
+  margin-bottom:10px;
+  display:none;
+}
+
+/* FOOT */
+.footer{
+  text-align:center;
+  font-size:12px;
+  margin-top:18px;
+  color:#9ca3af;
+}
+
+.footer a{
+  color:#4ea1ff;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="brand">
+  <h1>LOW PRICE PC GAMES</h1>
+  <p>Secure access to your account</p>
+</div>
+
+<div class="card">
+
+<div class="title">Sign in</div>
+
+<div class="error" id="error"></div>
+
+<div class="label">Email</div>
+<input type="email" id="email" class="input">
+
+<div class="label">Password</div>
+<input type="password" id="password" class="input">
+
+<button class="btn" onclick="login()">Sign In</button>
+
+<div class="footer">
+  Don’t have an account? <a href="signup.html">Sign up now</a>
+</div>
+
+</div>
+</div>
+
+<script>
+function login(){
+  let email=document.getElementById("email").value.trim();
+  let pass=document.getElementById("password").value.trim();
+
+  let savedUser = JSON.parse(localStorage.getItem("account"));
+
+  if(!email || !pass){
+    return showError("Fill all fields");
+  }
+
+  if(!savedUser){
+    return showError("No account found. Please sign up.");
+  }
+
+  if(email === savedUser.email && pass === savedUser.password){
+    localStorage.setItem("user","yes");
+    localStorage.setItem("userEmail",email);
+    window.location.href="index.html";
+  }else{
+    showError("Incorrect email or password");
+  }
+}
+
+function showError(msg){
+  let e=document.getElementById("error");
+  e.innerText=msg;
+  e.style.display="block";
+}
+</script>
+
+</body>
+</html>
