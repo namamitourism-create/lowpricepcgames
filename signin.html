@@ -37,19 +37,27 @@ html, body{
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 
 body{
-  background:#0b1220;
+  background:linear-gradient(180deg,#0b1220,#0a0f1a);
   color:#fff;
+
   height:100vh;
+  overflow:hidden; /* 🔒 no scroll */
+
   display:flex;
   justify-content:center;
-  align-items:center;
+
+  align-items:flex-start; /* move up */
+  padding-top:12vh; /* 👈 control position */
 }
 
 /* WRAPPER */
 .wrapper{
-  width:380px;
+  width:420px;
+  max-width:92%; /* 👈 fit mobile */
 }
-
+html, body{
+  overflow:hidden;
+}  
 /* BRAND */
 .brand{
   text-align:center;
