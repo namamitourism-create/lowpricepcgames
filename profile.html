@@ -395,8 +395,13 @@ points.innerText=pointsVal;
 let orders=JSON.parse(localStorage.getItem("orders")||"[]");
 inventory.innerText=orders.length;
 
-let cartItems=JSON.parse(localStorage.getItem("cartItems")||"[]");
+let cartItems=JSON.parse(localStorage.getItem("cart")||"[]");
 cart.innerText=cartItems.length;
+
+window.addEventListener("storage",()=>{
+  let c = JSON.parse(localStorage.getItem("cart")||"[]");
+  cart.innerText = c.length;
+});  
 
 level.innerText=Math.floor(pointsVal/100)+1;
 
