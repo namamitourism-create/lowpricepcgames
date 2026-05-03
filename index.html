@@ -63,6 +63,26 @@ nav a:hover{color:#4ea1ff;}
 .hero button{margin-top:10px;padding:12px 26px;background:#4ea1ff;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:0.25s;}
 .hero button:hover{transform:translateY(-3px);}
 
+.menu-item{
+  display:block;
+  color:#cbd5e1;
+  text-decoration:none;
+  padding:6px 0;
+  font-size:14px;
+}
+
+.menu-item:hover{
+  color:#4ea1ff;
+}
+
+.logout{
+  color:#ff3b3b !important;
+}
+
+.logout:hover{
+  color:#ff6b6b !important;
+}  
+  
 /* GRID */
 .section{padding:40px;}
 .games{display:grid;grid-template-columns:repeat(5,1fr);gap:25px;}
@@ -205,9 +225,9 @@ to{opacity:1;transform:translateY(0);}
   <a href="contact.html">Contact Us</a>
 
   <!-- ✅ LOGOUT (NOW CORRECT) -->
-  <a id="logoutBtn" class="logout" onclick="logoutUser()" style="display:none;">
-    Logout
-  </a>
+  <a id="logoutBtn" class="menu-item logout" onclick="logoutUser()" style="display:none;">
+  Logout
+</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
