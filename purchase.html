@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase History</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#060d1a;color:#fff;}
+
+/* LAYOUT */
+.container{display:flex;}
+.sidebar{
+  width:220px;background:#050a14;height:100vh;padding:20px;
+}
+.sidebar h2{color:#4ea1ff;margin-bottom:25px;}
+.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;}
+.sidebar a:hover{color:#4ea1ff;}
+
+.main{flex:1;padding:25px;}
+
+/* HEADER */
+.title{
+  font-size:24px;
+  margin-bottom:20px;
+}
+
+/* TABLE */
+.table{
+  width:100%;
+  border-collapse:collapse;
+  background:#0f172a;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.table th, .table td{
+  padding:12px;
+  text-align:left;
+}
+
+.table th{
+  background:#020617;
+  font-size:14px;
+  color:#94a3b8;
+}
+
+.table tr{
+  border-bottom:1px solid #1e293b;
+}
+
+.table tr:hover{
+  background:#020617;
+}
+
+/* GAME */
+.game-info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.game-info img{
+  width:50px;
+  height:70px;
+  object-fit:cover;
+  border-radius:6px;
+}
+
+/* STATUS */
+.status{
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.completed{background:#16a34a;color:#fff;}
+.pending{background:#f59e0b;color:#000;}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .sidebar{display:none;}
+
+  .container{flex-direction:column;}
+
+  .main{padding:12px;}
+
+  .table thead{display:none;}
+
+  .table, .table tbody, .table tr{
+    display:block;
+    width:100%;
+  }
+
+  .table tr{
+    background:#0f172a;
+    margin-bottom:12px;
+    border-radius:12px;
+    padding:10px;
+  }
+
+  .table td{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    font-size:13px;
+  }
+
+  .game-info{
+    flex-direction:row;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>LPPG</h2>
+<a href="index.html">Home</a>
+<a href="profile.html">Profile</a>
+<a>Orders</a>
+<a href="contact.html">Support</a>
+<a onclick="logout()" style="color:red;">Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<h1 class="title">🧾 Purchase History</h1>
+
+<table class="table" id="table">
+<thead>
+<tr>
+<th>Game</th>
+<th>Price</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+
+// 🔥 LOAD ORDERS
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let tbody = document.getElementById("tbody");
+
+// EMPTY STATE
+if(orders.length === 0){
+  tbody.innerHTML = `
+  <tr>
+    <td colspan="4" style="text-align:center;padding:20px;">
+      No purchases yet
+    </td>
+  </tr>`;
+}
+
+// RENDER
+orders.reverse().forEach(order=>{
+
+let tr = document.createElement("tr");
+
+tr.innerHTML = `
+<td>
+  <div class="game-info">
+    <img src="${order.img}">
+    <span>${order.name}</span>
+  </div>
+</td>
+
+<td>₹${order.price}</td>
+
+<td>${order.date || new Date().toLocaleDateString()}</td>
+
+<td><span class="status completed">Completed</span></td>
+`;
+
+tbody.appendChild(tr);
+
+});
+
+// LOGOUT
+function logout(){
+  localStorage.removeItem("user");
+  location.href="index.html";
+}
+
+</script>
+
+</body>
+</html>
