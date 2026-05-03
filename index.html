@@ -378,9 +378,17 @@ const gameData = [
 {title:"Need for Speed Heat",desc:"Day-night street racing with legal events by day and intense illegal races by night, featuring deep car tuning and pursuits."}
 ];
 
+// 🔥 SMART SHUFFLE (Fisher-Yates)
+function shuffleArray(arr){
+  for(let i = arr.length - 1; i > 0; i--){
+    let j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}  
 // RENDER
 const container=document.getElementById("gamesContainer");
-
+shuffleArray(gameData);
+  
 for(let i=1;i<=102;i++){
 let game=document.createElement("div");
 game.className="game";
@@ -473,6 +481,23 @@ if(localStorage.getItem("user")==="yes"){
   document.getElementById("logoutBtn").style.display="none";
 }
 
+// 🔥 SILENT ROTATION EVERY 20 SEC
+setInterval(()=>{
+  let cards = Array.from(document.querySelectorAll(".game"));
+
+  if(cards.length < 5) return;
+
+  // pick random 2 cards
+  let i1 = Math.floor(Math.random()*cards.length);
+  let i2 = Math.floor(Math.random()*cards.length);
+
+  if(i1 === i2) return;
+
+  let parent = cards[i1].parentNode;
+
+  parent.insertBefore(cards[i1], cards[i2]);
+},20000);  
+  
 /* LOGOUT FUNCTION */
 function logoutUser(){
   localStorage.removeItem("user");
