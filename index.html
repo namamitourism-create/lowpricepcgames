@@ -385,21 +385,28 @@ function shuffleArray(arr){
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
 }  
+
+// 🔥 RANDOM ORDER EVERY REFRESH (FIXED)
+for(let i = gameData.length - 1; i > 0; i--){
+  let j = Math.floor(Math.random() * (i + 1));
+  [gameData[i], gameData[j]] = [gameData[j], gameData[i]];
+}  
+  
 // RENDER
 const container=document.getElementById("gamesContainer");
-shuffleArray(gameData);
   
 for(let i=1;i<=102;i++){
 let game=document.createElement("div");
 game.className="game";
-  
+    
+let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
+
 game.onclick = function(){
   trackGame(title);
-};
+};  
   
-let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
-let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game.";
-
+let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game."  
+  
 let r=Math.random();
 let stars=r<0.5?"★★★★☆":r<0.8?"★★★☆☆":r<0.95?"★★★★⯪":"★★★★★";
 let reviews=(stars==="★★★★★"||stars==="★★★★⯪")?Math.floor(Math.random()*500)+300:Math.floor(Math.random()*250)+30;
@@ -409,6 +416,18 @@ let finalPrice=prices[Math.floor(Math.random()*3)];
 let discount=Math.floor(Math.random()*40)+40;
 let basePrice=Math.ceil((finalPrice*100/(100-discount))/100)*100;
 
+// 🔥 SUPER SMOOTH (NO ONE WILL NOTICE)
+setInterval(()=>{
+  let container = document.getElementById("gamesContainer");
+
+  let first = container.firstElementChild;
+
+  if(!first) return;
+
+  container.appendChild(first);
+
+},12000);
+  
 game.innerHTML=`
 <img src="${
 i<=99 ? 'GLOGO/'+i+'.jpg' :
@@ -483,28 +502,6 @@ if(localStorage.getItem("user")==="yes"){
 
 // 🔥 SILENT ROTATION EVERY 20 SEC
 // 🔥 SMART INVISIBLE ROTATION (REAL FIX)
-setInterval(()=>{
-  let container = document.getElementById("gamesContainer");
-  let cards = Array.from(container.children);
-
-  if(cards.length < 6) return;
-
-  // pick 3 random cards
-  let indexes = [];
-  while(indexes.length < 3){
-    let r = Math.floor(Math.random() * cards.length);
-    if(!indexes.includes(r)) indexes.push(r);
-  }
-
-  let [a,b,c] = indexes;
-
-  // rotate positions (circular swap)
-  let temp = cards[a];
-  container.replaceChild(cards[a], cards[b]);
-  container.replaceChild(cards[b], cards[c]);
-  container.replaceChild(cards[c], temp);
-
-},15000);
   
 /* LOGOUT FUNCTION */
 function logoutUser(){
