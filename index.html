@@ -384,7 +384,11 @@ const container=document.getElementById("gamesContainer");
 for(let i=1;i<=102;i++){
 let game=document.createElement("div");
 game.className="game";
-
+  
+game.onclick = function(){
+  trackGame(title);
+};
+  
 let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
 let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game.";
 
@@ -559,7 +563,13 @@ function updateMenu(){
     point.style.pointerEvents = "none";
   }
 }
+function trackGame(name){
+  let data = JSON.parse(localStorage.getItem("userData")) || {views:[],search:[]};
 
+  data.views.push(name);
+
+  localStorage.setItem("userData", JSON.stringify(data));
+}
 updateMenu();
 
 </script>
