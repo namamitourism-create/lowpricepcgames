@@ -7,13 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profile</title>
 
-<style>
-
-body{
-  transform:scale(0.85);
-  transform-origin:top left;
-  width:118%;
-  }  
+<style>  
   
 /* 🔥 LOCK INTERACTION */
 *{
@@ -60,13 +54,7 @@ body{background:#060d1a;color:#fff;}
   overflow:hidden;
   position:relative;
 }
-
-.profile-header{
-  border-radius:0;
-  position:relative;
-  top:40px;
- }
-
+  
 .icon-btn{
   width:28px;height:28px;
   border-radius:50%;
@@ -131,19 +119,18 @@ body{background:#060d1a;color:#fff;}
 
   /* BIG PROFILE PIC */
   .dp{
-  width:140px;
-  height:140px;
+  width:120px;
+  height:120px;
   }
 
   .profile-header{
   border-radius:0;
-  position:relative;
-  }
+}
 
   .banner{
-  height:140px;
-  background-position: center 30%;
-  }
+  height:180px;
+  background-position:center;
+}
   
   /* USERNAME BIG */
   .user h2{
@@ -183,7 +170,7 @@ body{background:#060d1a;color:#fff;}
 }
 
 .banner{
-  height:140px;
+  height:180px;
 }
 
 .user h2{
@@ -216,9 +203,11 @@ body{background:#060d1a;color:#fff;}
   
 .profile-content{
   display:flex;
+  flex-direction:column;
   align-items:center;
-  gap:20px;
-  padding:20px;
+  text-align:center;
+  gap:12px;
+  padding:15px;
 }
 
 .user h2{font-size:20px;}
@@ -244,7 +233,8 @@ body{background:#060d1a;color:#fff;}
 .desc-box[disabled]{background:transparent;border:none;}
 
 .edit-btn{
-  margin-left:auto;
+  margin-top:10px;
+  margin-left:0;
   background:#4ea1ff;
   padding:10px 16px;
   border:none;border-radius:8px;
@@ -296,7 +286,7 @@ body{background:#060d1a;color:#fff;}
   aspect-ratio:2/2.8;
 }
 .card-title{padding:6px;font-size:12px;}
-grid-template-columns:repeat(3,1fr);
+
 </style>
 </head>
 
