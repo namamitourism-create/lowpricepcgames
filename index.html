@@ -6,6 +6,16 @@
 <title>Low Price PC Games</title>
 
 <style>
+
+.logout{
+  color:#ff3b3b;
+  margin-top:10px;
+}
+
+.logout:hover{
+  background:rgba(255,59,59,0.1);
+}  
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 body{background:#0b1220;color:#fff;scroll-behavior:smooth;overflow-x:hidden;}
 
@@ -42,7 +52,7 @@ nav a:hover{color:#4ea1ff;}
   .logo{font-size:16px;}
   .search-box{width:110px;}
 }
- 
+
 /* HERO */
 .hero{position:relative;height:350px;overflow:hidden;}
 .hero-track{position:absolute;width:100%;height:100%;display:flex;transition:1s;}
@@ -53,6 +63,26 @@ nav a:hover{color:#4ea1ff;}
 .hero button{margin-top:10px;padding:12px 26px;background:#4ea1ff;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;transition:0.25s;}
 .hero button:hover{transform:translateY(-3px);}
 
+.menu-item{
+  display:block;
+  color:#cbd5e1;
+  text-decoration:none;
+  padding:6px 0;
+  font-size:14px;
+}
+
+.menu-item:hover{
+  color:#4ea1ff;
+}
+
+.logout{
+  color:#ff3b3b !important;
+}
+
+.logout:hover{
+  color:#ff6b6b !important;
+}  
+  
 /* GRID */
 .section{padding:40px;}
 .games{display:grid;grid-template-columns:repeat(5,1fr);gap:25px;}
@@ -153,7 +183,7 @@ to{opacity:1;transform:translateY(0);}
   header{padding:10px 12px;}
   .logo{font-size:16px;line-height:1.1;}
   .right-group{gap:8px;}
-  nav{display:flex;flex-direction:column;font-size:12px;}
+  nav{display:none !important;}
   nav a{margin:0;}
   .search-box{width:110px;padding:6px;}
   .hero{height:220px;}
@@ -193,6 +223,11 @@ to{opacity:1;transform:translateY(0);}
   <a id="purchaseBtn">Purchase History</a>
   <a id="pointBtn">LPPG Point Shop</a>
   <a href="contact.html">Contact Us</a>
+
+  <!-- ✅ LOGOUT (NOW CORRECT) -->
+  <a id="logoutBtn" class="menu-item logout" onclick="logoutUser()" style="display:none;">
+  Logout
+</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
@@ -237,7 +272,7 @@ setTimeout(()=>track.style.transition="1s",50);
 }
 },6000);
 
-// FULL GAME DATA
+// FULL GAME DATA (UNCHANGED)
 const gameData = [
 {title:"Assassin’s Creed Shadows",desc:"Stealth-action RPG set in feudal Japan with dual protagonists and open-world exploration."},
 {title:"EA Sports FC 26",desc:"Next-gen football simulation with realistic gameplay and immersive career modes."},
@@ -343,15 +378,44 @@ const gameData = [
 {title:"Need for Speed Heat",desc:"Day-night street racing with legal events by day and intense illegal races by night, featuring deep car tuning and pursuits."}
 ];
 
+// 🔥 PERSISTENT RANDOM ORDER (NO RESET ON REFRESH)
+let storedOrder = localStorage.getItem("gameOrder");
+
+if(storedOrder){
+  let parsed = JSON.parse(storedOrder);
+  if(parsed.length === gameData.length){
+    for(let i=0;i<gameData.length;i++){
+      gameData[i] = parsed[i];
+    }
+  }
+}else{
+  for(let i = gameData.length - 1; i > 0; i--){
+    let j = Math.floor(Math.random() * (i + 1));
+    [gameData[i], gameData[j]] = [gameData[j], gameData[i]];
+  }
+  localStorage.setItem("gameOrder", JSON.stringify(gameData));
+}
+
 // RENDER
 const container=document.getElementById("gamesContainer");
 
-for(let i=1;i<=102;i++){
+function renderGames(){
+
+container.innerHTML="";
+
+for(let i=0;i<102;i++){
+
+let dataIndex = i % gameData.length;
+
 let game=document.createElement("div");
 game.className="game";
 
-let title=i<=gameData.length?gameData[i-1].title:`Game ${i}`;
-let desc=i<=gameData.length?gameData[i-1].desc:"High-quality PC game.";
+let title=gameData[dataIndex]?.title || `Game ${i+1}`;
+let desc=gameData[dataIndex]?.desc || "High-quality PC game.";
+
+game.onclick = function(){
+  trackGame(title);
+};
 
 let r=Math.random();
 let stars=r<0.5?"★★★★☆":r<0.8?"★★★☆☆":r<0.95?"★★★★⯪":"★★★★★";
@@ -364,10 +428,10 @@ let basePrice=Math.ceil((finalPrice*100/(100-discount))/100)*100;
 
 game.innerHTML=`
 <img src="${
-i<=99 ? 'GLOGO/'+i+'.jpg' :
-i<=198 ? 'GLOGO2/'+i+'.jpg' :
-i<=297 ? 'GLOGO3/'+i+'.jpg' :
-'GLOGO/'+i+'.jpg'
+i<=99 ? 'GLOGO/'+(i+1)+'.jpg' :
+i<=198 ? 'GLOGO2/'+(i+1)+'.jpg' :
+i<=297 ? 'GLOGO3/'+(i+1)+'.jpg' :
+'GLOGO/'+(i+1)+'.jpg'
 }">
 <h3>${title}</h3>
 <p>${desc}</p>
@@ -381,7 +445,7 @@ i<=297 ? 'GLOGO3/'+i+'.jpg' :
 </div>
 
 <div class="actions">
-<button class="btn buy" onclick="buyGame(event,'${title}',${finalPrice},${basePrice},${discount},${i})">BUY NOW</button>
+<button class="btn buy" onclick="buyGame(event,'${title}',${finalPrice},${basePrice},${discount},${i+1})">BUY NOW</button>
 <button class="btn cart" onclick="addToCart(event)">ADD TO CART</button>
 </div>
 `;
@@ -389,13 +453,36 @@ i<=297 ? 'GLOGO3/'+i+'.jpg' :
 container.appendChild(game);
 }
 
-// SCROLL
+// 🔥 APPLY ANIMATION AFTER RENDER (FIXED)
+document.querySelectorAll(".game").forEach(g=>observer.observe(g));
+}
+
+renderGames();
+
+// SCROLL ANIMATION
 const observer=new IntersectionObserver(entries=>{
 entries.forEach(e=>{
 if(e.isIntersecting){e.target.classList.add("show");}
 });
 });
-document.querySelectorAll(".game").forEach(g=>observer.observe(g));
+
+// 🔥 SMART INVISIBLE ROTATION (ONLY BELOW SCREEN)
+setInterval(()=>{
+  let cards = container.children;
+  if(cards.length < 10) return;
+
+  let start = Math.floor(cards.length * 0.6);
+
+  let i1 = start + Math.floor(Math.random() * (cards.length - start));
+  let i2 = start + Math.floor(Math.random() * (cards.length - start));
+
+  if(i1 === i2) return;
+
+  let node1 = cards[i1];
+  let node2 = cards[i2];
+
+  container.insertBefore(node1, node2);
+},20000);
 
 // CART
 function addToCart(e){
@@ -405,47 +492,50 @@ let name = card.querySelector("h3").innerText;
 let price = parseInt(card.querySelector(".price").innerText.replace("₹",""));
 let img = card.querySelector("img").getAttribute("src");
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-// check existing
 let existing = cart.find(item => item.name === name);
 
 if(existing){
   existing.qty += 1;
 } else {
-  cart.push({
-    name: name,
-    price: price,
-    img: img,
-    qty: 1
-  });
+  cart.push({ name, price, img, qty:1 });
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cartItems", JSON.stringify(cart));
 document.getElementById("cartDot").style.display="block";
 }
 
-// 🔥 FIXED BUY FUNCTION (ONLY CHANGE)
+// AUTH UI
+if(localStorage.getItem("user")==="yes"){
+  document.getElementById("logoutBtn").style.display="block";
+}else{
+  document.getElementById("logoutBtn").style.display="none";
+}
+
+function logoutUser(){
+  localStorage.removeItem("user");
+  localStorage.removeItem("userEmail");
+  window.location.href="index.html";
+}
+
+// BUY
 function buyGame(e,name,price,base,disc,index){
   e.stopPropagation();
 
   localStorage.setItem("order", JSON.stringify({
-    name:name,
-    price:price,
-    base:base,
-    disc:disc,
+    name,price,base,disc,
     img:
 index<=99 ? 'GLOGO/'+index+'.jpg' :
 index<=198 ? 'GLOGO2/'+index+'.jpg' :
 index<=297 ? 'GLOGO3/'+index+'.jpg' :
-'GLOGO/'+index+'.jpg' // 🔥 THIS FIXES IMAGE ISSUE
+'GLOGO/'+index+'.jpg'
   }));
 
   window.location.href="payment.html";
 }
 
 function openCart(){window.location.href="cart.html";}
-function scrollToGames(){document.getElementById("gamesSection").scrollIntoView({behavior:"smooth"});}
 
 // SEARCH
 const searchInput=document.querySelector(".search-box");
@@ -457,62 +547,64 @@ let d=g.querySelector("p").innerText.toLowerCase();
 g.style.display=(t.includes(q)||d.includes(q))?"flex":"none";
 });
 });
+
+// MENU
 function openMenu(){
   document.getElementById("sideMenu").classList.add("active");
   document.getElementById("overlay").classList.add("active");
 }
-
 function closeMenu(){
   document.getElementById("sideMenu").classList.remove("active");
   document.getElementById("overlay").classList.remove("active");
 }
+
+// USER DATA TRACK
+function trackGame(name){
+  let data = JSON.parse(localStorage.getItem("userData")) || {views:[],search:[]};
+  data.views.push(name);
+  localStorage.setItem("userData", JSON.stringify(data));
+}
+
 function updateMenu(){
   const user = localStorage.getItem("user");
-
   const btn1 = document.getElementById("authBtn1");
   const btn2 = document.getElementById("authBtn2");
-
   const purchase = document.getElementById("purchaseBtn");
   const point = document.getElementById("pointBtn");
 
   if(user){
-    // ✅ LOGGED IN
-    btn1.innerText = "Profile";
-    btn1.href = "profile.html";
+    btn1.innerText="Profile";
+    btn1.href="profile.html";
+    btn2.style.display="none";
 
-    btn2.style.display = "none";
+    purchase.href="purchase.html";
+    purchase.style.pointerEvents="auto";
+    purchase.style.opacity="1";
 
-    purchase.href = "purchase.html";
-    purchase.style.opacity = "1";
-    purchase.style.pointerEvents = "auto";
-
-    point.href = "pointstore.html";
-    point.style.opacity = "1";
-    point.style.pointerEvents = "auto";
-
+    point.href="pointstore.html";
+    point.style.pointerEvents="auto";
+    point.style.opacity="1";
   }else{
-    // ❌ NOT LOGGED IN
-    btn1.innerText = "Sign In";
-    btn1.href = "signin.html";
+    btn1.innerText="Sign In";
+    btn1.href="signin.html";
 
-    btn2.innerText = "Sign Up";
-    btn2.href = "login.html";
-    btn2.style.display = "block";
+    btn2.innerText="Sign Up";
+    btn2.href="login.html";
+    btn2.style.display="block";
 
-    // 🔒 LOCK BUTTONS
     purchase.removeAttribute("href");
-    purchase.style.opacity = "0.5";
-    purchase.style.pointerEvents = "none";
+    purchase.style.pointerEvents="none";
+    purchase.style.opacity="0.5";
 
     point.removeAttribute("href");
-    point.style.opacity = "0.5";
-    point.style.pointerEvents = "none";
+    point.style.pointerEvents="none";
+    point.style.opacity="0.5";
   }
 }
 
 updateMenu();
 
 </script>
-
+  
 </body>
 </html>
