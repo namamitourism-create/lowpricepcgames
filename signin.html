@@ -2,10 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sign In</title>
 
 <style>
+
+*{
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+/* allow typing */
+input, textarea{
+  -webkit-user-select:text;
+  user-select:text;
+}
+
+/* stop image hold */
+img{
+  pointer-events:none;
+}
+
+/* fix mobile zoom issue */
+input{
+  font-size:16px;
+}
+
+/* disable double tap zoom */
+html, body{
+  touch-action:manipulation;
+}  
+  
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 
 body{
@@ -151,6 +179,27 @@ body{
 </div>
 
 <script>
+
+// 🚫 disable right click
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// 🚫 stop pinch zoom
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1){
+    e.preventDefault();
+  }
+}, {passive:false});
+
+// 🚫 stop double tap zoom
+let lastTouch=0;
+document.addEventListener("touchend", e=>{
+  let now=new Date().getTime();
+  if(now-lastTouch<=300){
+    e.preventDefault();
+  }
+  lastTouch=now;
+},false);  
+  
 function login(){
   let email=document.getElementById("email").value.trim();
   let pass=document.getElementById("password").value.trim();
