@@ -155,7 +155,43 @@ body{background:#060d1a;color:#fff;}
     grid-template-columns:repeat(2,1fr);
     gap:10px;
   }
+  /* 🔥 FINAL COMPACT FIX (PASTE HERE) */
 
+.profile-content{
+  gap:10px;
+  padding:12px;
+}
+
+.banner{
+  height:120px;
+}
+
+.user h2{
+  font-size:18px;
+}
+
+.stats{
+  gap:8px;
+  margin-top:10px;
+}
+
+.box{
+  padding:8px;
+  font-size:12px;
+}
+
+.section{
+  margin-top:15px;
+}
+
+.grid{
+  gap:8px;
+}
+
+.card-title{
+  font-size:11px;
+  padding:4px;
+}
 }
   
 .profile-content{
@@ -469,7 +505,19 @@ function logout(){
 localStorage.removeItem("user");
 location.href="index.html";
 }
+// 🔥 SCROLL TO SELECTED GAME
+let selected = localStorage.getItem("selectedGame");
 
+if(selected){
+  setTimeout(()=>{
+    document.querySelectorAll(".game").forEach(card=>{
+      if(card.querySelector("h3").innerText === selected){
+        card.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    });
+    localStorage.removeItem("selectedGame");
+  },500);
+}
 </script>
 
 </body>
