@@ -482,21 +482,29 @@ if(localStorage.getItem("user")==="yes"){
 }
 
 // 🔥 SILENT ROTATION EVERY 20 SEC
+// 🔥 SMART INVISIBLE ROTATION (REAL FIX)
 setInterval(()=>{
-  let cards = Array.from(document.querySelectorAll(".game"));
+  let container = document.getElementById("gamesContainer");
+  let cards = Array.from(container.children);
 
-  if(cards.length < 5) return;
+  if(cards.length < 6) return;
 
-  // pick random 2 cards
-  let i1 = Math.floor(Math.random()*cards.length);
-  let i2 = Math.floor(Math.random()*cards.length);
+  // pick 3 random cards
+  let indexes = [];
+  while(indexes.length < 3){
+    let r = Math.floor(Math.random() * cards.length);
+    if(!indexes.includes(r)) indexes.push(r);
+  }
 
-  if(i1 === i2) return;
+  let [a,b,c] = indexes;
 
-  let parent = cards[i1].parentNode;
+  // rotate positions (circular swap)
+  let temp = cards[a];
+  container.replaceChild(cards[a], cards[b]);
+  container.replaceChild(cards[b], cards[c]);
+  container.replaceChild(cards[c], temp);
 
-  parent.insertBefore(cards[i1], cards[i2]);
-},20000);  
+},15000);
   
 /* LOGOUT FUNCTION */
 function logoutUser(){
