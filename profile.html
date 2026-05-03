@@ -334,13 +334,57 @@ pool.sort(()=>Math.random()-0.5);
 
 let list=[...new Set(pool)].slice(0,8);
 
+// 🔥 GAME NAME → IMAGE MATCH (WITH GLOGO + GLOGO2)
+function getGameImage(name){
+
+const games = [
+"Assassin’s Creed Shadows","EA Sports FC 26","Mafia: The Old Country","Silent Hill F","Black Myth: Wukong",
+"Call of Duty: Modern Warfare II (2022)","Call of Duty: Modern Warfare III (2023)","Nioh","Avatar: Frontiers of Pandora",
+"Call of Duty: Black Ops Cold War","Battlefield 6","Crimson Desert","Resident Evil: Requiem","Forza Horizon 6",
+"Death Stranding 2","Forza Horizon 5","Cricket 26","F1 25","Microsoft Flight Simulator 2020","Microsoft Flight Simulator 2024",
+"WWE 2K26","Rust","Pragmata","Grand Theft Auto V","Red Dead Redemption 2","The Last of Us Part II Remastered",
+"The Last of Us Part I","Euro Truck Simulator 2","Far Cry 6","Far Cry New Dawn","Far Cry 5","Far Cry 4","Far Cry 3",
+"Dying Light: The Beast","Forza Horizon 4","MotoGP 2026","Resident Evil Biohazared","Kingdom Come Deliverance 2",
+"Resident Evil Village","Ghost of tsushima director's cut","Street Fighter 6","EA Sports FC 25","EA Sports FC 24",
+"FIFA 23","FIFA 22","FIFA 21","FIFA 20","SnowRunner","American Truck Simulator","Farming Simulator 25",
+"Farming Simulator 22","Dying Light 2","Dying Light","Days Gone","No man's sky","Squad","ARMA 3",
+"Resident Evil 2 Remake","Resident Evil 4 Remake","Outlast","Cities Skylines 2","Subnautica",
+"Assassin’s Creed Origins","Assassin’s Creed Odyssey","Assassin’s Creed Valhalla","Assassin’s Creed Mirage",
+"Mafia III","Mafia II","Watch Dogs Legion","Watch Dogs 2","Watch Dogs","Sleeping Dogs",
+"Show of the tomb raider","Rise of the Tomb Raider","Hitman 2","Hitman World of assasiation",
+"Farming Simulator 23","Battlefield 2042","Battlefield 5","Battlefield 1","Control",
+"Cyberpunk 2077","Elden Ring","The Crew 2","The Witcher 3","Train Sim World 6",
+"Assetto Corsa EVO","Forza Motorsport","Spider-Man 2","Spider-Man Remastered",
+"God of War","God of War Ragnarok","Uncharted 4","Uncharted Lost Legacy",
+"Horizon Forbidden West","Horizon Zero Dawn","Baldur’s Gate 3","Metro 2033 Exodus",
+"Just Cause 4 Reloaded","Just Cause 3","Need for Speed Unbound","Need for Speed Heat"
+];
+
+let index = games.indexOf(name);
+
+// 🔥 IMAGE LOGIC
+if(index === -1) return "GLOGO/1.jpg";
+
+index = index + 1;
+
+// first 100 → GLOGO
+if(index <= 100){
+  return `GLOGO/${index}.jpg`;
+}
+// next → GLOGO2
+else{
+  return `GLOGO2/${index}.jpg`;
+}
+
+}
+  
 let grid=document.getElementById("games");
 
 list.forEach((g,i)=>{
 let div=document.createElement("div");
 div.className="card";
 div.innerHTML=`
-<img src="GLOGO/${(i%120)+1}.jpg">
+<img src="${getGameImage(g)}">
 <div class="card-title">${g}</div>`;
 grid.appendChild(div);
 });
