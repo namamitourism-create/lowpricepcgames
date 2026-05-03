@@ -279,32 +279,57 @@ document.getElementById("doneBtn").style.display="block";
 
 function completeOrder(){
 
-let id=localStorage.getItem("orderID");
+let b = JSON.parse(localStorage.getItem("billing"));
+let id = localStorage.getItem("orderID");
 
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let phone=document.getElementById("phone").value;
-let address=document.getElementById("address").value;
-let txn=document.getElementById("txn").value;
+// 🔥 SAVE PURCHASE (MAIN FIX)
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+cart.forEach(item=>{
+  orders.push({
+    name: item.name,
+    price: item.price,
+    img: item.img || "GLOGO/1.jpg",
+    qty: item.qty,
+    date: new Date().toLocaleDateString(),
+    status: "Completed",
+    orderID: id
+  });
+});
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+// CLEAR CART + TEMP DATA
+localStorage.removeItem("checkoutCart");
+localStorage.removeItem("orderID");
+
+// 🔥 WHATSAPP (UNCHANGED)
+let items="";
+cart.forEach(i=>items+=`\n🎮 ${i.name} × ${i.qty}`);
 
 let msg=`Hello Low Price PC Games,
+Payment Successful✅
 
-Payment Successful
+🛒Order details
+${items}
+💰Total: ₹${total}
 
-🎮 ${order.name}
-💰 Total: ₹${order.price}
+Name: ${b.name}
+Email: ${b.email}
+Phone: ${b.phone}
+Address: ${b.address}
 
-👤 Name: ${name}
-📧 Email: ${email}
-📱 Phone: ${phone}
-🏠 Address: ${address}
-
-🧾 Txn ID: ${txn}
-🆔 Order ID: ${id}
+🆔Order ID: ${id}
 
 Please process the delivery`;
 
 window.open(`https://api.whatsapp.com/send?phone=919395579036&text=${encodeURIComponent(msg)}`);
+
+// 🔥 REDIRECT
+setTimeout(()=>{
+  window.location.href = "purchase.html";
+},1000);
+
 }
 
 </script>
