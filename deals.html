@@ -203,33 +203,132 @@ nav a:hover{color:#fff;}
 
 <script>
 
-// HERO SLIDER (UNCHANGED)
+// HERO (same)
 const track=document.getElementById("heroTrack");
-
 for(let i=1;i<=4;i++){
 let img=document.createElement("img");
 img.src=`DL/DL${i}.jpg`;
 track.appendChild(img);
 }
 
-track.appendChild(track.children[0].cloneNode(true));
 
-let index=0;
+// ===== GLOBAL UNIVERSAL DATES =====
+const deal6_start = new Date("2026-05-10T12:00:00").getTime();
+const deal6_end   = new Date("2026-05-19T12:00:00").getTime();
 
-setInterval(()=>{
-index++;
-track.style.transform=`translateX(-${index*100}%)`;
+const deal7_show  = new Date("2026-05-17T12:00:00").getTime();
+const deal7_start = new Date("2026-05-22T00:30:00").getTime();
+const deal7_end   = new Date("2026-05-31T00:30:00").getTime();
 
-if(index===4){
-setTimeout(()=>{
-track.style.transition="none";
-track.style.transform="translateX(0)";
-index=0;
-setTimeout(()=>track.style.transition="1s",50);
-},1000);
+const deal8_show  = new Date("2026-05-24T12:00:00").getTime();
+const deal8_start = new Date("2026-05-29T00:30:00").getTime();
+const deal8_end   = new Date("2026-06-07T00:30:00").getTime();
+
+
+// ===== DEAL ENGINE =====
+function handleDeal(cfg){
+const card=document.getElementById(cfg.id);
+const label=document.getElementById(cfg.timerId);
+
+function update(){
+let now=Date.now();
+
+if(cfg.show && now<cfg.show){
+card.style.display="none";
+return;
+}else{
+card.style.display="block";
 }
 
-},6000);
+// UPCOMING
+if(now<cfg.start){
+card.className="card upcoming";
+
+let diff=cfg.start-now;
+let d=Math.floor(diff/86400000);
+let h=Math.floor((diff%86400000)/3600000);
+let m=Math.floor((diff%3600000)/60000);
+
+label.innerText=`Starts in ${d}D : ${h}H : ${m}M`;
+card.onclick=null;
+return;
+}
+
+// LIVE
+if(now>=cfg.start && now<cfg.end){
+card.className="card live";
+label.innerText=`₹${cfg.price}`;
+card.onclick=()=>location.href=cfg.link;
+return;
+}
+
+// ENDED (REMOVE AFTER 5 DAYS)
+if(now>=cfg.end){
+let removeTime=cfg.end+(5*86400000);
+
+if(now>=removeTime){
+card.style.display="none";
+return;
+}
+
+card.className="card upcoming";
+label.innerText="Deal Ended";
+card.onclick=null;
+return;
+}
+}
+
+update();
+setInterval(update,1000);
+}
+
+
+// ===== APPLY =====
+handleDeal({
+id:"deal6Card",
+timerId:"deal6Timer",
+start:deal6_start,
+end:deal6_end,
+price:399,
+link:"deal6.html"
+});
+
+handleDeal({
+id:"deal7Card",
+timerId:"deal7Timer",
+show:deal7_show,
+start:deal7_start,
+end:deal7_end,
+price:449,
+link:"deal7.html"
+});
+
+handleDeal({
+id:"deal8Card",
+timerId:"deal8Timer",
+show:deal8_show,
+start:deal8_start,
+end:deal8_end,
+price:449,
+link:"deal8.html"
+});
+
+
+// ===== SORT (LIVE → UPCOMING → ENDED) =====
+function getPriority(card){
+if(card.classList.contains("live")) return 1;
+if(card.innerText.includes("Deal Ended")) return 3;
+return 2;
+}
+
+setInterval(()=>{
+let grid=document.getElementById("grid");
+let cards=[...grid.children];
+
+cards.sort((a,b)=>getPriority(a)-getPriority(b));
+cards.forEach(c=>grid.appendChild(c));
+},1500);
+
 
 function scrollToDeals(){
 document.getElementById("dealsSection").scrollIntoView({behavior:"smooth"});
