@@ -39,14 +39,27 @@ html, body{
 body{
   background:linear-gradient(180deg,#0b1220,#0a0f1a);
   color:#fff;
+
   height:100vh;
+  overflow:hidden; /* 🔒 no scroll */
+
   display:flex;
   justify-content:center;
-  align-items:center;
+
+  align-items:flex-start; /* move up */
+  padding-top:12vh; /* 👈 control position */
 }
 
 /* WRAPPER */
-.wrapper{width:420px;}
+.wrapper{
+  width:420px;
+  max-width:92%;
+}
+
+/* 👇 PASTE HERE (LAST LINE) */
+html, body{
+  overflow:hidden;
+}
 
 /* BRAND */
 .brand{text-align:center;margin-bottom:25px;}
