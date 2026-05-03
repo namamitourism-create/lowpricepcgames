@@ -81,6 +81,70 @@ body{background:#060d1a;color:#fff;}
 
 .dp-edit{bottom:5px;right:5px;}
 
+/* 🔥 MOBILE FIX (COPY FULL) */
+@media(max-width:768px){
+
+  /* REMOVE LEFT SIDEBAR */
+  .sidebar{
+    display:none !important;
+  }
+
+  /* FULL WIDTH */
+  .container{
+    flex-direction:column;
+  }
+
+  .main{
+    width:100%;
+    padding:12px;
+  }
+
+  /* PROFILE CENTER LIKE INSTAGRAM */
+  .profile-content{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+
+  /* BIG PROFILE PIC */
+  .dp{
+    width:110px;
+    height:110px;
+  }
+
+  /* USERNAME BIG */
+  .user h2{
+    font-size:20px;
+    margin-top:10px;
+  }
+
+  /* DESCRIPTION FULL WIDTH */
+  .desc-box{
+    width:100%;
+    text-align:center;
+  }
+
+  /* STATS ROW */
+  .stats{
+    display:flex;
+    justify-content:space-between;
+    gap:6px;
+  }
+
+  .box{
+    flex:1;
+    font-size:13px;
+    padding:10px;
+  }
+
+  /* GAME GRID FIX */
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+}
+  
 .profile-content{
   display:flex;
   align-items:center;
