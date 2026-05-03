@@ -7,6 +7,16 @@
 
 <style>
 
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{
+  pointer-events: none;
+}
+  
 .logout{
   color:#ff3b3b;
   margin-top:10px;
@@ -250,6 +260,11 @@ to{opacity:1;transform:translateY(0);}
 
 <script>
 
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+}, {passive:false});
+  
 // HERO
 const track=document.getElementById("heroTrack");
 for(let i=1;i<=5;i++){
