@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rainy Season Deals</title>
+
+<style>
+
+*{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+img{ pointer-events:none; }
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+
+body{
+  background:#0b1220;
+  color:#fff;
+  position:relative;
+}
+
+/* BG */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("BG/BG1.jpe") center/cover no-repeat;
+  filter:blur(8px);
+  opacity:0.3;
+  z-index:0;
+}
+
+header,.container{position:relative;z-index:1;}
+
+header{
+  background:#0a0f1a;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #1f2a44;
+}
+
+.logo{color:#4ea1ff;font-weight:700;}
+
+.nav-btns{display:flex;gap:10px;}
+
+.nav-btns button{
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  background:#1f2a44;
+  color:#fff;
+  cursor:pointer;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.title{
+  font-size:20px;
+  margin-bottom:20px;
+  text-align:center;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  overflow:hidden;
+  transition:0.35s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.04);
+  box-shadow:0 18px 45px rgba(0,0,0,0.7);
+}
+
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+}
+
+.card-content{padding:10px;}
+
+.card h3{font-size:13px;}
+.card p{font-size:12px;color:#aaa;margin-top:6px;}
+
+/* BUY */
+.buy-box{
+  margin-top:25px;
+  background:#111a2e;
+  padding:18px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.price-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.old-price{
+  color:#888;
+  text-decoration:line-through;
+  font-size:13px;
+}
+
+.main-price{
+  color:#ffd54f;
+  font-size:22px;
+  font-weight:800;
+}
+
+.discount{
+  background:#1f3b6d;
+  color:#4ea1ff;
+  font-size:11px;
+  padding:3px 6px;
+  border-radius:6px;
+}
+
+.save-text{
+  font-size:11px;
+  color:#9ca3af;
+}
+
+.timer{
+  margin-top:10px;
+  font-size:14px;
+  color:#ff3b3b;
+  font-weight:700;
+}
+
+.btn{
+  margin-top:12px;
+  padding:10px 20px;
+  background:#4ea1ff;
+  border:none;
+  border-radius:8px;
+  color:#fff;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOW PRICE PC GAMES</div>
+<div class="nav-btns">
+  <button onclick="history.back()">Back</button>
+  <button onclick="location.href='index.html'">Home</button>
+</div>
+</header>
+
+<div class="container">
+
+<div class="title">Rainy Season Deals</div>
+
+<div class="grid">
+
+<div class="card">
+<img src="GLOGO2/103.jpg">
+<div class="card-content">
+<h3>Call of Duty: Modern Warfare 2019</h3>
+<p>Realistic modern combat with cinematic campaign.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="GLOGO/24.jpg">
+<div class="card-content">
+<h3>Grand Theft Auto V</h3>
+<p>Open-world crime experience with massive freedom.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="GLOGO/28.jpg">
+<div class="card-content">
+<h3>Euro Truck Simulator 2</h3>
+<p>Drive across Europe with realistic trucking simulation.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="GLOGO/57.jpg">
+<div class="card-content">
+<h3>Arma 3</h3>
+<p>Military sandbox with realistic tactical warfare.</p>
+</div>
+</div>
+
+</div>
+
+<div class="buy-box">
+
+<div class="price-row">
+  <span class="old-price">₹999</span>
+  <span class="main-price">₹399</span>
+  <span class="discount">60% OFF</span>
+</div>
+
+<div class="save-text">You save ₹600 on this bundle</div>
+
+<div class="timer" id="timer"></div>
+
+<button class="btn" onclick="buyDeal()">Buy Now</button>
+
+</div>
+
+</div>
+
+<script>
+
+// GLOBAL TIMINGS (same as deals.html)
+const startTime = new Date("2026-05-10T12:00:00").getTime();
+const endTime = new Date("2026-05-19T12:00:00").getTime();
+
+function updateTimer(){
+let now = Date.now();
+
+if(now < startTime){
+document.getElementById("timer").innerText = "Deal not live yet";
+return;
+}
+
+if(now >= startTime && now < endTime){
+let diff = endTime - now;
+
+let d = Math.floor(diff / 86400000);
+let h = Math.floor((diff % 86400000) / 3600000);
+let m = Math.floor((diff % 3600000) / 60000);
+
+document.getElementById("timer").innerText =
+`Offer ends in ${d}D : ${h}H : ${m}M`;
+
+return;
+}
+
+// AFTER END
+document.getElementById("timer").innerText = "Deal Ended";
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
+function buyDeal(){
+localStorage.setItem("order", JSON.stringify({
+name: "Rainy Season Deals",
+price: 399,
+base: 999,
+disc: 60,
+images: ["GLOGO2/103.jpg","GLOGO/24.jpg","GLOGO/28.jpg","GLOGO/57.jpg"]
+}));
+
+window.location.href = "payment3.html";
+}
+
+// PROTECTION
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+</script>
+
+</body>
+</html>
