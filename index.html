@@ -264,6 +264,9 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});
+
+let acc = JSON.parse(localStorage.getItem("account")) || {};
+let userKey = acc.email || "guest";
   
 // HERO
 const track=document.getElementById("heroTrack");
@@ -483,7 +486,7 @@ let name = card.querySelector("h3").innerText;
 let price = parseInt(card.querySelector(".price").innerText.replace("₹",""));
 let img = card.querySelector("img").getAttribute("src");
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cart_"+userKey)) || [];
 
 // check existing
 let existing = cart.find(item => item.name === name);
@@ -499,7 +502,7 @@ if(existing){
   });
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cart_"+userKey, JSON.stringify(cart));
 document.getElementById("cartDot").style.display="block";
 }
 
@@ -522,7 +525,7 @@ function logoutUser(){
 function buyGame(e,name,price,base,disc,index){
   e.stopPropagation();
 
-  localStorage.setItem("order", JSON.stringify({
+  localStorage.setItem("order_"+userKey, JSON.stringify({
     name:name,
     price:price,
     base:base,
@@ -537,6 +540,11 @@ index<=297 ? 'GLOGO3/'+index+'.jpg' :
   window.location.href="payment.html";
 }
 
+let cartCheck = JSON.parse(localStorage.getItem("cart_"+userKey) || "[]");
+if(cartCheck.length > 0){
+  document.getElementById("cartDot").style.display="block";
+}  
+  
 function openCart(){window.location.href="cart.html";}
 function scrollToGames(){document.getElementById("gamesSection").scrollIntoView({behavior:"smooth"});}
 
