@@ -297,11 +297,29 @@ function signup(){
     return showError("Wrong CAPTCHA");
   }
 
-  localStorage.setItem("account",JSON.stringify({
-    username:u,
-    email:e,
-    password:p
-  }));
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+// 🔒 check duplicate email
+let exists = users.find(user => user.email === e);
+
+if(exists){
+  return showError("Email already registered");
+}
+
+// ✅ save new user
+users.push({
+  username: u,
+  email: e,
+  password: p
+});
+
+localStorage.setItem("users", JSON.stringify(users));
+
+// ✅ login session
+localStorage.setItem("user","yes");
+localStorage.setItem("userEmail", e);
+
+window.location.href = "index.html";
 
   localStorage.setItem("user","yes");
 
