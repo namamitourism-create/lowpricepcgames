@@ -166,7 +166,13 @@ body{background:#060d1a;color:#fff;}
 <script>
 
 // 🔥 LOAD ORDERS
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+let orders = JSON.parse(localStorage.getItem("orders_"+userEmail)) || [];
 
 let tbody = document.getElementById("tbody");
 
@@ -207,6 +213,7 @@ tbody.appendChild(tr);
 // LOGOUT
 function logout(){
   localStorage.removeItem("user");
+  localStorage.removeItem("userEmail");
   location.href="index.html";
 }
 // 🔒 DISABLE RIGHT CLICK
