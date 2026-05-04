@@ -383,11 +383,24 @@ body{background:#060d1a;color:#fff;}
   grid-template-columns:repeat(2,1fr);
   gap:10px;
 }
+
 .card{
-  background:#111a2e;
-  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+
+  border-radius:14px;
   overflow:hidden;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  transition:0.3s;
 }
+
+.card:hover{
+  transform:translateY(-5px) scale(1.02);
+  box-shadow:0 0 15px rgba(78,161,255,0.3);
+}
+  
 .card img{
   width:100%;
   aspect-ratio:2/3;
@@ -472,8 +485,8 @@ body{background:#060d1a;color:#fff;}
 </div>
 
 <div class="section">
-<h3>🎯 Games For You</h3>
-<div class="grid" id="games"></div>
+<h3>🎮 MY GAMES</h3>
+<div class="grid" id="myGames"></div>
 </div>
 
 </div>
@@ -593,23 +606,29 @@ else{
 
 }
   
-let grid=document.getElementById("games");
+let myGrid = document.getElementById("myGames");
 
-list.forEach((g,i)=>{
-let div=document.createElement("div");
-div.className="card";
+// 🔥 GET USER PURCHASED GAMES
+let myGames = JSON.parse(localStorage.getItem("orders")||"[]");
 
-div.onclick = function(){
-  localStorage.setItem("selectedGame", g);
-  window.location.href = "index.html";
-};
+if(myGames.length === 0){
+  myGrid.innerHTML = "<p style='color:#888;'>No games purchased yet</p>";
+}else{
 
-div.innerHTML=`
-<img src="${getGameImage(g)}">
-<div class="card-title">${g}</div>`;
+myGames.forEach(g=>{
 
-grid.appendChild(div);
+  let div=document.createElement("div");
+  div.className="card";
+
+  div.innerHTML=`
+  <img src="${getGameImage(g)}">
+  <div class="card-title">${g}</div>
+  `;
+
+  myGrid.appendChild(div);
+
 });
+}
 
 // EDIT MODE
 let edit=false;
