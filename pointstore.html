@@ -108,6 +108,38 @@ body{
   overflow-x:hidden;
 }
 }
+
+/* HERO (same as index) */
+.hero{
+  position:relative;
+  height:260px;
+  overflow:hidden;
+  margin-top:70px; /* below fixed header */
+}
+
+.hero-track{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  transition:1s;
+}
+
+.hero-track img{
+  width:100%;
+  flex-shrink:0;
+  object-fit:cover;
+  opacity:0.6;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(to right,#0b122099,#0b1220cc);
+}  
+  
 </style>
 </head>
 
@@ -118,6 +150,10 @@ body{
   <div class="home-btn" onclick="location.href='index.html'">Home</div>
 </div>
 
+<section class="hero">
+  <div class="hero-track" id="heroTrack"></div>
+</section>  
+  
 <div class="container">
   <div class="grid" id="grid"></div>
 </div>
@@ -135,6 +171,33 @@ if(!userEmail){
 document.getElementById("points").innerText =
 localStorage.getItem("points_"+userEmail) || 0;
 
+// HERO SLIDER (same as index)
+const track=document.getElementById("heroTrack");
+
+for(let i=1;i<=5;i++){
+  let img=document.createElement("img");
+  img.src=`BLOGO/B${i}.jpg`;
+  track.appendChild(img);
+}
+
+track.appendChild(track.children[0].cloneNode(true));
+
+let index=0;
+
+setInterval(()=>{
+  index++;
+  track.style.transform=`translateX(-${index*100}%)`;
+
+  if(index===5){
+    setTimeout(()=>{
+      track.style.transition="none";
+      track.style.transform="translateX(0)";
+      index=0;
+      setTimeout(()=>track.style.transition="1s",50);
+    },1000);
+  }
+},6000);
+  
 // 🔥 FULL GAME LIST (ALL 129)
 const games = [
 "Assassin’s Creed Shadows","EA Sports FC 26","Mafia: The Old Country","Silent Hill F","Black Myth: Wukong",
