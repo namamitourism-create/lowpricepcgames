@@ -540,11 +540,6 @@ index<=297 ? 'GLOGO3/'+index+'.jpg' :
   window.location.href="payment.html";
 }
 
-let cartCheck = JSON.parse(localStorage.getItem("cart_"+userKey) || "[]");
-if(cartCheck.length > 0){
-  document.getElementById("cartDot").style.display="block";
-}  
-  
 function openCart(){window.location.href="cart.html";}
 function scrollToGames(){document.getElementById("gamesSection").scrollIntoView({behavior:"smooth"});}
 
