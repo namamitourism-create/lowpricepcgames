@@ -209,26 +209,31 @@ document.addEventListener("touchend", e=>{
 },false);  
   
 function login(){
-  let email=document.getElementById("email").value.trim();
-  let pass=document.getElementById("password").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("password").value.trim();
 
-  let savedUser = JSON.parse(localStorage.getItem("account"));
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
   if(!email || !pass){
     return showError("Fill all fields");
   }
 
-  if(!savedUser){
-    return showError("No account found. Please sign up.");
+  // 🔍 find matching user
+  let foundUser = users.find(u => u.email === email);
+
+  if(!foundUser){
+    return showError("Account not found");
   }
 
-  if(email === savedUser.email && pass === savedUser.password){
-    localStorage.setItem("user","yes");
-    localStorage.setItem("userEmail",email);
-    window.location.href="index.html";
-  }else{
-    showError("Incorrect email or password");
+  if(foundUser.password !== pass){
+    return showError("Wrong password");
   }
+
+  // ✅ login success
+  localStorage.setItem("user","yes");
+  localStorage.setItem("userEmail", email);
+
+  window.location.href="index.html";
 }
 
 function showError(msg){
