@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us</title>
+
+<style>
+
+/* 🔒 PROTECTION */
+*{
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+img{pointer-events:none;}
+html,body{
+  touch-action:manipulation;
+}
+
+/* BASE */
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{
+  background:#060d1a;
+  color:#fff;
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+/* HEADER */
+.header{
+  position:relative;
+  margin-bottom:25px;
+}
+
+.title{
+  font-size:26px;
+  font-weight:700;
+}
+
+.subtitle{
+  color:#9ca3af;
+  font-size:13px;
+  margin-top:3px;
+}
+
+/* HOME BUTTON */
+.home-btn{
+  position:absolute;
+  top:0;
+  right:0;
+
+  width:38px;
+  height:38px;
+  border-radius:50%;
+
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:17px;
+  cursor:pointer;
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  transition:0.2s;
+}
+
+.home-btn:hover{
+  background:rgba(78,161,255,0.25);
+  transform:scale(1.08);
+}
+
+/* CARD */
+.card{
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+
+  padding:20px;
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  margin-bottom:16px;
+}
+
+/* LABEL */
+.label{
+  font-size:12px;
+  color:#9ca3af;
+  margin-bottom:6px;
+}
+
+/* VALUE */
+.value{
+  font-size:16px;
+  font-weight:600;
+  color:#4ea1ff;
+  word-break:break-all;
+}
+
+/* TEXT */
+.text{
+  font-size:13px;
+  color:#cbd5e1;
+  line-height:1.6;
+}
+
+/* FEEDBACK BUTTON */
+.feedback-btn{
+  margin-top:25px;
+  width:100%;
+  padding:14px;
+
+  border:none;
+  border-radius:12px;
+
+  background:linear-gradient(90deg,#4ea1ff,#6bb4ff);
+  color:#fff;
+
+  font-size:15px;
+  font-weight:600;
+
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.feedback-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(78,161,255,0.3);
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+  .container{
+    padding:14px;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <div class="title">Contact Us</div>
+  <div class="subtitle">Support & assistance for your account and purchases</div>
+
+  <div class="home-btn" onclick="location.href='index.html'">🏠</div>
+</div>
+
+<!-- EMAIL -->
+<div class="card">
+  <div class="label">Official Email</div>
+  <div class="value">lowpricepcgames@gmail.com</div>
+</div>
+
+<!-- SUPPORT -->
+<div class="card">
+  <div class="label">Support Details</div>
+  <div class="text">
+    For any issues related to purchases, login problems, game delivery, or account data,
+    please contact us via the official email above.  
+    Make sure to include clear details so we can assist you faster.
+  </div>
+</div>
+
+<!-- RESPONSE -->
+<div class="card">
+  <div class="label">Response Time</div>
+  <div class="text">
+    We typically respond within 24–48 hours depending on request volume.
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<button class="feedback-btn" onclick="feedback()">Send Feedback</button>
+
+</div>
+
+<script>
+
+// 🔒 disable right click
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// 🔒 stop multi-touch zoom
+document.addEventListener("touchstart", e => {
+  if(e.touches.length > 1) e.preventDefault();
+},{passive:false});
+
+// 🔒 disable drag
+document.addEventListener("dragstart", e => e.preventDefault());
+
+// FEEDBACK ACTION
+function feedback(){
+  alert("Feedback system coming soon.");
+}
+
+</script>
+
+</body>
+</html>
