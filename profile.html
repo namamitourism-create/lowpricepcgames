@@ -145,18 +145,24 @@ body{background:#060d1a;color:#fff;}
     text-align:center;
   }
 
-  /* STATS ROW */
-  .stats{
-    display:flex;
-    justify-content:space-between;
-    gap:6px;
-  }
-
   .box{
-    flex:1;
-    font-size:13px;
-    padding:10px;
-  }
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+
+  padding:18px;
+  border-radius:16px;
+
+  text-align:center;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:6px;
+
+  border:1px solid rgba(255,255,255,0.08);
+}
 
   /* GAME GRID FIX */
   .grid{
@@ -189,6 +195,21 @@ body{background:#060d1a;color:#fff;}
   font-size:12px;
 }
 
+.icon{
+  font-size:22px;
+  color:#4ea1ff;
+}
+
+.label{
+  font-size:13px;
+  color:#cbd5e1;
+}
+
+.value{
+  font-size:20px;
+  font-weight:bold;
+}  
+  
 .section{
   margin-top:15px;
 }
@@ -265,8 +286,10 @@ body{background:#060d1a;color:#fff;}
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:15px;margin-top:20px;
-}
+  gap:12px;
+  margin-top:20px;
+} 
+  
 .box{
   background:#111a2e;
   padding:15px;border-radius:12px;
