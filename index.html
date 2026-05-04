@@ -50,15 +50,15 @@
 .claim-btn{
   position:absolute;
 
-  bottom:18px;       /* 👈 adjust if needed */
+  bottom:32px;          /* 🔥 move UP (main fix) */
   left:50%;
   transform:translateX(-50%);
 
-  width:70%;
+  width:68%;            /* slightly better fit */
   padding:12px;
 
   border:none;
-  border-radius:10px;
+  border-radius:12px;
 
   background:#ffd54f;
   color:#000;
@@ -67,7 +67,7 @@
   cursor:pointer;
   transition:0.25s;
 
-  box-shadow:0 8px 20px rgba(0,0,0,0.5);
+  box-shadow:0 8px 20px rgba(0,0,0,0.6);
 }
 
 .claim-btn:hover{
@@ -349,6 +349,7 @@ let bonusKey = "bonusClaimed_"+userEmail;
 if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
   setTimeout(()=>{
     document.getElementById("bonusPopup").classList.add("show");
+document.body.style.overflow = "hidden";  // 🔥 lock scroll
   },800);
 }
 
@@ -361,6 +362,7 @@ function claimBonus(){
   localStorage.setItem(bonusKey, "yes");
 
   document.getElementById("bonusPopup").classList.remove("show");
+document.body.style.overflow = "auto";   // 🔥 unlock
 }  
 
 if(!userEmail){
