@@ -50,15 +50,15 @@
 .claim-btn{
   position:absolute;
 
-  bottom:32px;          /* 🔥 move UP (main fix) */
+  bottom:18px;          /* 🔥 LOWER (main fix) */
   left:50%;
   transform:translateX(-50%);
 
-  width:68%;            /* slightly better fit */
-  padding:12px;
+  width:82%;            /* 🔥 MORE HORIZONTAL */
+  padding:14px;
 
   border:none;
-  border-radius:12px;
+  border-radius:14px;
 
   background:#ffd54f;
   color:#000;
@@ -67,7 +67,7 @@
   cursor:pointer;
   transition:0.25s;
 
-  box-shadow:0 8px 20px rgba(0,0,0,0.6);
+  box-shadow:0 10px 25px rgba(0,0,0,0.7);
 }
 
 .claim-btn:hover{
@@ -349,7 +349,10 @@ let bonusKey = "bonusClaimed_"+userEmail;
 if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
   setTimeout(()=>{
     document.getElementById("bonusPopup").classList.add("show");
-document.body.style.overflow = "hidden";  // 🔥 lock scroll
+
+document.body.style.overflow = "hidden";
+document.body.style.height = "100vh";   // 🔥 lock mobile scroll
+document.body.style.touchAction = "none"; // 🔥 stop touch scroll  // 🔥 lock scroll
   },800);
 }
 
@@ -362,7 +365,10 @@ function claimBonus(){
   localStorage.setItem(bonusKey, "yes");
 
   document.getElementById("bonusPopup").classList.remove("show");
-document.body.style.overflow = "auto";   // 🔥 unlock
+
+document.body.style.overflow = "auto";
+document.body.style.height = "auto";
+document.body.style.touchAction = "auto";   // 🔥 unlock
 }  
 
 if(!userEmail){
