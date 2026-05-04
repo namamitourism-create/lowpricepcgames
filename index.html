@@ -316,29 +316,6 @@ to{opacity:1;transform:translateY(0);}
 <footer>LowPrice Pc Games© 2026</footer>
 
 <script>
-
-// 🎁 SHOW BONUS (ONLY ONCE PER USER)
-let bonusKey = "bonusClaimed_"+userEmail;
-
-if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
-  setTimeout(()=>{
-    document.getElementById("bonusPopup").classList.add("show");
-  },800); // smooth delay
-}
-
-// 🎁 CLAIM FUNCTION
-function claimBonus(){
-
-  let points = parseInt(localStorage.getItem("points_"+userEmail) || 0);
-
-  points += 100;
-
-  localStorage.setItem("points_"+userEmail, points);
-  localStorage.setItem(bonusKey, "yes");
-
-  // smooth close
-  document.getElementById("bonusPopup").classList.remove("show");
-}
   
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("touchstart", e => {
@@ -346,6 +323,26 @@ document.addEventListener("touchstart", e => {
 }, {passive:false});
 
 let userEmail = localStorage.getItem("userEmail");
+
+// 🎁 BONUS SYSTEM (FIXED POSITION)
+let bonusKey = "bonusClaimed_"+userEmail;
+
+if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
+  setTimeout(()=>{
+    document.getElementById("bonusPopup").classList.add("show");
+  },800);
+}
+
+function claimBonus(){
+  let points = parseInt(localStorage.getItem("points_"+userEmail) || 0);
+
+  points += 100;
+
+  localStorage.setItem("points_"+userEmail, points);
+  localStorage.setItem(bonusKey, "yes");
+
+  document.getElementById("bonusPopup").classList.remove("show");
+}  
 
 if(!userEmail){
   userEmail = "guest"; // allow browsing without login
