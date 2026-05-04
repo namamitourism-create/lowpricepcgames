@@ -31,10 +31,8 @@
   border-radius:16px;
   overflow:visible;
   background:#0f172a;
-  transform:scale(0.8);
-  transition:0.4s;
 
-  position:relative; /* 🔥 IMPORTANT */
+  position:relative;   /* 🔥 MUST */
 }
 
 .bonus-popup.show .bonus-box{
@@ -53,9 +51,10 @@
 .claim-btn{
   position:absolute;
 
-  top:80%;   /* 🔥 CHANGE THIS VALUE */
+  top:80%;          /* 🔥 ONLY CONTROL */
   left:50%;
-  transform:translate(-50%, -50%);
+
+  transform:translateX(-50%);   /* ONLY X center */
 
   width:85%;
   padding:14px;
@@ -73,9 +72,8 @@
   box-shadow:0 14px 35px rgba(0,0,0,0.9);
 }
 .claim-btn:hover{
-  transform:translate(-50%, -50%) scale(1.05);
+  transform:translateX(-50%) scale(1.05);
 }
-
 .bonus-box button:hover{
   background:#ffca2c;
 }
