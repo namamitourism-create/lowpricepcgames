@@ -14,7 +14,7 @@
 }
 
 img{
-  pointer-events: none;
+  pointer-events: auto;
 }
   
 .logout{
@@ -276,6 +276,16 @@ const track=document.getElementById("heroTrack");
 for(let i=1;i<=5;i++){
 let img=document.createElement("img");
 img.src=`BLOGO/B${i}.jpg`;
+
+// ✅ make only B1, B3, B5 clickable
+if(i===1 || i===3 || i===5){
+  img.style.cursor = "pointer";
+
+  img.addEventListener("click", ()=>{
+    window.location.href = "pointstore.html";
+  });
+}
+
 track.appendChild(img);
 }
 track.appendChild(track.children[0].cloneNode(true));
