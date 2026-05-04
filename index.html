@@ -265,8 +265,11 @@ document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});
 
-let acc = JSON.parse(localStorage.getItem("account")) || {};
-let userKey = acc.email || "guest";
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  userEmail = "guest"; // allow browsing without login
+}
   
 // HERO
 const track=document.getElementById("heroTrack");
@@ -486,7 +489,7 @@ let name = card.querySelector("h3").innerText;
 let price = parseInt(card.querySelector(".price").innerText.replace("₹",""));
 let img = card.querySelector("img").getAttribute("src");
 
-let cart = JSON.parse(localStorage.getItem("cart_"+userKey)) || [];
+let cart = JSON.parse(localStorage.getItem("cart_"+userEmail)) || [];
 
 // check existing
 let existing = cart.find(item => item.name === name);
@@ -502,7 +505,7 @@ if(existing){
   });
 }
 
-localStorage.setItem("cart_"+userKey, JSON.stringify(cart));
+localStorage.setItem("cart_"+userEmail, JSON.stringify(cart));
 document.getElementById("cartDot").style.display="block";
 }
 
@@ -525,7 +528,7 @@ function logoutUser(){
 function buyGame(e,name,price,base,disc,index){
   e.stopPropagation();
 
-  localStorage.setItem("order_"+userKey, JSON.stringify({
+  localStorage.setItem("order_"+userEmail, JSON.stringify({
     name:name,
     price:price,
     base:base,
@@ -592,7 +595,7 @@ function updateMenu(){
     btn1.href = "signin.html";
 
     btn2.innerText = "Sign Up";
-    btn2.href = "login.html";
+    btn2.href = "signup.html";
     btn2.style.display = "block";
 
     // 🔒 LOCK BUTTONS
