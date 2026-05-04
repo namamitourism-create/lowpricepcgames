@@ -213,10 +213,113 @@ document.addEventListener("dragstart", e => e.preventDefault());
 
 // FEEDBACK ACTION
 function feedback(){
-  alert("Feedback system coming soon.");
+  document.getElementById("feedbackBox").style.display = "block";
 }
 
+// GET USER
+let userEmail = localStorage.getItem("userEmail") || "guest";
+
+// LOAD COMMENTS
+function loadFeedback(){
+
+  let list = document.getElementById("feedbackList");
+  list.innerHTML = "";
+
+  let data = JSON.parse(localStorage.getItem("feedback_"+userEmail)) || [];
+
+  data.reverse().forEach(item=>{
+
+    let div = document.createElement("div");
+
+    div.style = `
+    background:#0f172a;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+    border:1px solid #1f2a44;
+    `;
+
+    div.innerHTML = `
+    <div style="font-size:12px;color:#9ca3af;">
+      ${item.name} • ${item.time}
+    </div>
+
+    <div style="margin-top:4px;font-size:14px;">
+      ${item.text}
+    </div>
+    `;
+
+    list.appendChild(div);
+
+  });
+
+}
+
+// POST
+function postFeedback(){
+
+  let input = document.getElementById("feedbackInput");
+  let text = input.value.trim();
+
+  if(text.length < 6){
+    alert("Minimum 6 characters required");
+    return;
+  }
+
+  let username = userEmail.split("@")[0];
+
+  let data = JSON.parse(localStorage.getItem("feedback_"+userEmail)) || [];
+
+  data.push({
+    name: username,
+    text: text,
+    time: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("feedback_"+userEmail, JSON.stringify(data));
+
+  input.value = "";
+
+  loadFeedback();
+}
+
+// LOAD ON START
+loadFeedback();
+  
 </script>
 
+<div id="feedbackBox" style="display:none;margin-top:20px;">
+
+<textarea id="feedbackInput"
+placeholder="Write your feedback..."
+maxlength="120"
+style="
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+background:#0f172a;
+color:#fff;
+resize:none;
+height:80px;
+"></textarea>
+
+<button onclick="postFeedback()" style="
+margin-top:8px;
+float:right;
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#4ea1ff;
+color:#fff;
+cursor:pointer;
+">Post</button>
+
+<div style="clear:both;"></div>
+
+</div>
+
+<div id="feedbackList" style="margin-top:20px;"></div>
+  
 </body>
 </html>
