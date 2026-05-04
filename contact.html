@@ -227,7 +227,7 @@ function loadFeedback(){
 
   let data = JSON.parse(localStorage.getItem("feedback_"+userEmail)) || [];
 
-  data.reverse().forEach(item=>{
+  data.forEach(item=>{
 
     let div = document.createElement("div");
 
@@ -268,7 +268,7 @@ function postFeedback(){
 
   let username = userEmail.split("@")[0];
 
-  let data = JSON.parse(localStorage.getItem("feedback_"+userEmail)) || [];
+  let data = JSON.parse(localStorage.getItem(feedback_all)) || [];
 
   data.push({
     name: username,
