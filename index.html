@@ -7,6 +7,59 @@
 
 <style>
 
+/* 🎁 BONUS POPUP */
+.bonus-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:0.4s;
+  z-index:9999;
+}
+
+.bonus-popup.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.bonus-box{
+  width:260px;
+  border-radius:16px;
+  overflow:hidden;
+  background:#0f172a;
+  transform:scale(0.8);
+  transition:0.4s;
+}
+
+.bonus-popup.show .bonus-box{
+  transform:scale(1);
+}
+
+.bonus-box img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+}
+
+.bonus-box button{
+  width:100%;
+  padding:14px;
+  border:none;
+  background:#ffd54f;
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.bonus-box button:hover{
+  background:#ffca2c;
+}
+  
 *{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -264,6 +317,29 @@ to{opacity:1;transform:translateY(0);}
 
 <script>
 
+// 🎁 SHOW BONUS (ONLY ONCE PER USER)
+let bonusKey = "bonusClaimed_"+userEmail;
+
+if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
+  setTimeout(()=>{
+    document.getElementById("bonusPopup").classList.add("show");
+  },800); // smooth delay
+}
+
+// 🎁 CLAIM FUNCTION
+function claimBonus(){
+
+  let points = parseInt(localStorage.getItem("points_"+userEmail) || 0);
+
+  points += 100;
+
+  localStorage.setItem("points_"+userEmail, points);
+  localStorage.setItem(bonusKey, "yes");
+
+  // smooth close
+  document.getElementById("bonusPopup").classList.remove("show");
+}
+  
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
@@ -627,5 +703,14 @@ updateMenu();
 
 </script>
 
+<!-- 🎁 SIGNUP BONUS POPUP -->
+<div id="bonusPopup" class="bonus-popup">
+  <div class="bonus-box">
+    <img src="noti/noti1.jpg">
+
+    <button onclick="claimBonus()">CLAIM</button>
+  </div>
+</div>
+  
 </body>
 </html>
