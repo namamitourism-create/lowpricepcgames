@@ -530,15 +530,6 @@ let finalName = p.name || defaultName;
 // apply to UI
 username.innerText = finalName;
 usernameInput.value = finalName;
-  
-// 🔥 LOAD PROFILE ONCE (ONLY ONE TIME)
-let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
-
-// default username
-let defaultName = userEmail.split("@")[0];
-
-// final username
-let finalName = p.name || defaultName;
 
 // 🔥 DEFAULT IMAGES
 const defaultDP = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
