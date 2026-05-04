@@ -736,7 +736,7 @@ function uploadDP(){
 
     r.onload = () => {
       dpImg.src = r.result;
-      saveImg("dp", r.result);
+      saveImg("dp", file);
     };
 
     r.readAsDataURL(file);
@@ -758,7 +758,7 @@ function uploadBanner(){
 
     r.onload = () => {
       banner.style.backgroundImage = `url(${r.result})`;
-      saveImg("banner", r.result);
+      saveImg("banner", file);
     };
 
     r.readAsDataURL(file);
@@ -767,23 +767,51 @@ function uploadBanner(){
   i.click();
 }
 
-function saveImg(type,val){
+function saveImg(type, file){
 
-  let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+  let reader = new FileReader();
 
-  data[type] = val;
+  reader.onload = function(e){
 
-  localStorage.setItem("profile_"+userKey, JSON.stringify(data));
+    let img = new Image();
 
-  // 🔥 UPDATE UI INSTANTLY (THIS WAS MISSING)
-  if(type === "dp"){
-    dpImg.src = val;
-  }
+    img.onload = function(){
 
-  if(type === "banner"){
-    banner.style.backgroundImage = `url(${val})`;
-  }
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
 
+      // 🔥 resize image
+      let maxWidth = 400;
+      let scale = maxWidth / img.width;
+
+      canvas.width = maxWidth;
+      canvas.height = img.height * scale;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      let compressed = canvas.toDataURL("image/jpeg", 0.5); // 🔥 compress
+
+      let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+
+      data[type] = compressed;
+
+      localStorage.setItem("profile_"+userKey, JSON.stringify(data));
+
+      // update UI
+      if(type === "dp"){
+        dpImg.src = compressed;
+      }
+
+      if(type === "banner"){
+        banner.style.backgroundImage = `url(${compressed})`;
+      }
+
+    };
+
+    img.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
 }
   
 function logout(){
