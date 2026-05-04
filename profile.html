@@ -519,10 +519,14 @@ if(!userEmail){
 let userKey = userEmail;
 
 // default name from email
+let p = JSON.parse(localStorage.getItem("profile_"+userEmail)) || {};
+
 let defaultName = userEmail.split("@")[0];
 
-username.innerText = defaultName;
-usernameInput.value = defaultName;
+let finalName = p.name || defaultName;
+
+username.innerText = finalName;
+usernameInput.value = finalName;
 
 // PROFILE
 let p=JSON.parse(localStorage.getItem("profile_"+userKey))||{};
