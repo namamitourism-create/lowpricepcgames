@@ -139,6 +139,25 @@ body{
   height:100%;
   background:linear-gradient(to right,#0b122099,#0b1220cc);
 }  
+
+.hero-content{
+  position:absolute;
+  top:50%;
+  left:40px;
+  transform:translateY(-50%);
+  z-index:2;
+}
+
+.hero-content h1{
+  font-size:28px;
+  font-weight:700;
+}
+
+.hero-content p{
+  margin-top:8px;
+  font-size:13px;
+  color:#9bdcff;
+}
   
 </style>
 </head>
@@ -152,6 +171,16 @@ body{
 
 <section class="hero">
   <div class="hero-track" id="heroTrack"></div>
+
+  <!-- ✅ TEXT CONTENT -->
+  <div class="hero-content">
+    <h1>
+      <span style="color:#fff;">LOWPRICE PC</span>
+      <span style="color:#4ea1ff;"> GAME POINT</span>
+      <span style="color:#fff;"> SHOP</span>
+    </h1>
+    <p>Claim AAA titles with LPPG points</p>
+  </div>
 </section>  
   
 <div class="container">
