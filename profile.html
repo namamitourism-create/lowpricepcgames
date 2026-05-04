@@ -742,13 +742,21 @@ i.click();
 
 function saveImg(type,val){
 
-let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+  let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
 
-data[type] = val;
+  data[type] = val;
 
-localStorage.setItem("profile_"+userKey, JSON.stringify(data));
+  localStorage.setItem("profile_"+userKey, JSON.stringify(data));
 
-profileData = data; // 🔥 keep sync
+  // 🔥 UPDATE UI INSTANTLY (THIS WAS MISSING)
+  if(type === "dp"){
+    dpImg.src = val;
+  }
+
+  if(type === "banner"){
+    banner.style.backgroundImage = `url(${val})`;
+  }
+
 }
   
 function logout(){
