@@ -280,6 +280,8 @@ function postFeedback(){
 
   input.value = "";
 
+  document.getElementById("feedbackBox").style.display = "none"; // 🔥 NEW LINE
+
   loadFeedback();
 }
 
@@ -302,20 +304,21 @@ background:#0f172a;
 color:#fff;
 resize:none;
 height:80px;
+box-sizing:border-box;   /* 🔥 ADD THIS LINE */
 "></textarea>
 
 <button onclick="postFeedback()" style="
-margin-top:8px;
-float:right;
-padding:10px 16px;
+margin-top:10px;
+width:100%;
+padding:12px;
 border:none;
-border-radius:8px;
+border-radius:10px;
 background:#4ea1ff;
 color:#fff;
 cursor:pointer;
-">Post</button>
-
-<div style="clear:both;"></div>
+">
+Post
+</button>
 
 </div>
 
