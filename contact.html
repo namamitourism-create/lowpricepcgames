@@ -284,9 +284,9 @@ localStorage.setItem("feedback_all", JSON.stringify(data));
 
   loadFeedback();
 }
-
-// LOAD ON START
-loadFeedback();
+window.onload = function(){
+  loadFeedback();
+}
   
 </script>
 
