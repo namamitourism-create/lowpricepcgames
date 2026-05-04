@@ -521,7 +521,18 @@ if(!userEmail){
 let userKey = userEmail;
 
 // 🔥 LOAD PROFILE (ONLY ONCE)
-let profileData = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+let profileData = JSON.parse(localStorage.getItem("profile_"+userKey));
+
+if(!profileData){
+  profileData = {
+    name: userEmail.split("@")[0],
+    desc: "No description",
+    dp: "",
+    banner: ""
+  };
+
+  localStorage.setItem("profile_"+userKey, JSON.stringify(profileData));
+}
 let username = document.getElementById("username");
 let usernameInput = document.getElementById("usernameInput");
 let dpImg = document.getElementById("dpImg");
@@ -694,10 +705,14 @@ document.querySelector(".edit-btn").style.display = edit ? "none" : "block";
 // SAVE
 function saveProfile(){
 
-profileData.desc = desc.value;
-profileData.name = usernameInput.value;
+let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
 
-localStorage.setItem("profile_"+userKey, JSON.stringify(profileData));
+data.desc = desc.value;
+data.name = usernameInput.value;
+
+localStorage.setItem("profile_"+userKey, JSON.stringify(data));
+
+profileData = data;
 
 location.reload();
 }
@@ -727,9 +742,13 @@ i.click();
 
 function saveImg(type,val){
 
-profileData[type] = val;
+let data = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
 
-localStorage.setItem("profile_"+userKey, JSON.stringify(profileData));
+data[type] = val;
+
+localStorage.setItem("profile_"+userKey, JSON.stringify(data));
+
+profileData = data; // 🔥 keep sync
 }
   
 function logout(){
