@@ -33,6 +33,8 @@
   background:#0f172a;
   transform:scale(0.8);
   transition:0.4s;
+
+  position:relative; /* 🔥 IMPORTANT */
 }
 
 .bonus-popup.show .bonus-box{
@@ -45,15 +47,32 @@
   object-fit:cover;
 }
 
-.bonus-box button{
-  width:100%;
-  padding:14px;
+.claim-btn{
+  position:absolute;
+
+  bottom:18px;       /* 👈 adjust if needed */
+  left:50%;
+  transform:translateX(-50%);
+
+  width:70%;
+  padding:12px;
+
   border:none;
+  border-radius:10px;
+
   background:#ffd54f;
   color:#000;
   font-weight:700;
+
   cursor:pointer;
-  transition:0.2s;
+  transition:0.25s;
+
+  box-shadow:0 8px 20px rgba(0,0,0,0.5);
+}
+
+.claim-btn:hover{
+  background:#ffca2c;
+  transform:translateX(-50%) scale(1.05);
 }
 
 .bonus-box button:hover{
@@ -703,10 +722,11 @@ updateMenu();
 <!-- 🎁 SIGNUP BONUS POPUP -->
 <div id="bonusPopup" class="bonus-popup">
   <div class="bonus-box">
-    <img src="noti/noti1.jpg">
+  <img src="noti/noti1.jpg">
 
-    <button onclick="claimBonus()">CLAIM</button>
-  </div>
+  <!-- 🔥 BUTTON INSIDE IMAGE -->
+  <button class="claim-btn" onclick="claimBonus()">CLAIM</button>
+</div>
 </div>
   
 </body>
