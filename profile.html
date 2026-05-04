@@ -71,9 +71,12 @@ body{background:#060d1a;color:#fff;}
 .banner-edit{bottom:10px;right:10px;}
 
 .dp{
-  width:90px;height:90px;border-radius:50%;
-  overflow:hidden;border:3px solid #4ea1ff;
-  position:relative;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid #4ea1ff;
+  background:#0f172a;
 }
 .dp img{width:100%;height:100%;object-fit:cover;}
 
@@ -230,7 +233,8 @@ body{background:#060d1a;color:#fff;}
   align-items:center;
   text-align:center;
   gap:12px;
-  padding:15px;
+  padding:0;
+  margin-top:-50px;   /* 🔥 THIS MAKES DP OVERLAP */
 }
 
 .user h2{font-size:20px;}
@@ -287,15 +291,41 @@ body{background:#060d1a;color:#fff;}
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:12px;
-  margin-top:20px;
-} 
+  margin-top:25px;
+}
   
 .box{
-  background:#111a2e;
-  padding:15px;border-radius:12px;
-  text-align:center;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+
+  padding:16px;
+  border-radius:16px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:6px;
+
+  border:1px solid rgba(255,255,255,0.08);
 }
 
+.icon{
+  font-size:22px;
+  color:#4ea1ff;
+}
+
+.label{
+  font-size:13px;
+  color:#cbd5e1;
+}
+
+.value{
+  font-size:20px;
+  font-weight:bold;
+}
+  
 .section{margin-top:25px;}
 .grid{
   grid-template-columns:repeat(2,1fr);
@@ -354,16 +384,37 @@ body{background:#060d1a;color:#fff;}
 <input id="desc" class="desc-box" value="No description" disabled>
 </div>
 
-<button class="edit-btn" onclick="toggleEdit()">Edit Profile</button>
+<button class="edit-btn" onclick="toggleEdit()">👤 Edit Profile</button>
 
 </div>
 </div>
 
 <div class="stats">
-<div class="box">LPPG Points<br><b id="points">0</b></div>
-<div class="box">Game Inventory<br><b id="inventory">0</b></div>
-<div class="box">Cart<br><b id="cart">0</b></div>
-<div class="box">Level<br><b id="level">1</b></div>
+
+<div class="box">
+  <div class="icon">⭐</div>
+  <div class="label">LPPG Points</div>
+  <div class="value" id="points">0</div>
+</div>
+
+<div class="box">
+  <div class="icon">🎮</div>
+  <div class="label">Game Inventory</div>
+  <div class="value" id="inventory">0</div>
+</div>
+
+<div class="box">
+  <div class="icon">🛒</div>
+  <div class="label">Cart</div>
+  <div class="value" id="cart">0</div>
+</div>
+
+<div class="box">
+  <div class="icon">📊</div>
+  <div class="label">Level</div>
+  <div class="value" id="level">1</div>
+</div>
+
 </div>
 
 <div class="section">
