@@ -152,7 +152,13 @@ document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});
   
-let order=JSON.parse(localStorage.getItem("order"));
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+let order = JSON.parse(localStorage.getItem("order_"+userEmail));
 
 if(order){
 document.getElementById("gameName").innerText=order.name;
@@ -186,7 +192,7 @@ function phoneField(){return document.getElementById("phone")}
 function addressField(){return document.getElementById("address")}
 
 function processOrder(){
-localStorage.setItem("billing",JSON.stringify({
+localStorage.setItem("billing_"+userEmail,JSON.stringify({
 name:nameField().value,
 email:emailField().value,
 phone:phoneField().value,
@@ -201,7 +207,7 @@ function payUPI(app){
 let upiID="dj55alok-1@okhdfcbank";
 
 let orderID="LP"+Date.now();
-localStorage.setItem("orderID",orderID);
+localStorage.setItem("orderID_"+userEmail,orderID);
 
 let url=`upi://pay?pa=${upiID}&pn=Alook&am=${order.price}&cu=INR`;
 
@@ -237,11 +243,10 @@ document.getElementById("doneBtn").style.display="block";
 
 function completeOrder(){
 
-let billing=JSON.parse(localStorage.getItem("billing"));
-let orderID=localStorage.getItem("orderID");
+let billing = JSON.parse(localStorage.getItem("billing_"+userEmail));
+let orderID = localStorage.getItem("orderID_"+userEmail);
 
-// 🔥 SAVE PURCHASE (MOST IMPORTANT)
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let orders = JSON.parse(localStorage.getItem("orders_"+userEmail)) || [];
 
 orders.push({
   name: order.name,
@@ -252,10 +257,10 @@ orders.push({
   orderID: orderID
 });
 
-localStorage.setItem("orders", JSON.stringify(orders));
-
+localStorage.setItem("orders_"+userEmail, JSON.stringify(orders));
+  
 // REMOVE CURRENT ORDER
-localStorage.removeItem("order");
+localStorage.removeItem("order_"+userEmail);
 
 // 🔥 WHATSAPP MESSAGE (UNCHANGED)
 let msg=`Hello Low Price PC Games,
