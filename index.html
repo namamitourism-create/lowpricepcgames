@@ -5,77 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Low Price PC Games</title>
 
-<style>
-
-/* 🎁 BONUS POPUP */
-.bonus-popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:0;
-  pointer-events:none;
-  transition:0.4s;
-  z-index:9999;
-}
-
-.bonus-popup.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.bonus-box{
-  width:260px;
-  border-radius:16px;
-  overflow:visible;
-  background:#0f172a;
-
-  position:relative;   /* 🔥 MUST */
-}
-
-.bonus-popup.show .bonus-box{
-  transform:scale(1);
-}
-
-.bonus-box img{
-  width:100%;
-  aspect-ratio:4/5;
-  object-fit:cover;
-
-  position:relative;
-  top:2px;   /* 🔥 moves image DOWN */
-}
-
-.claim-btn{
-  position:absolute;
-
-  top:400px;        /* 🔥 THIS CONTROLS UP/DOWN */
-  left:50%;
-  transform:translateX(-50%);
-
-  width:85%;
-  padding:14px;
-
-  border:none;
-  border-radius:18px;
-
-  background:#ffd54f;
-  color:#000;
-  font-weight:700;
-
-  cursor:pointer;
-
-  box-shadow:0 14px 35px rgba(0,0,0,0.9);
-}
-.claim-btn:hover{
-  transform:translateX(-50%) scale(1.05);
-}
-.bonus-box button:hover{
-  background:#ffca2c;
-}
-  
+<style>  
 *{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -339,35 +269,7 @@ document.addEventListener("touchstart", e => {
 }, {passive:false});
 
 let userEmail = localStorage.getItem("userEmail");
-
-// 🎁 BONUS SYSTEM (FIXED POSITION)
-let bonusKey = "bonusClaimed_"+userEmail;
-
-if(localStorage.getItem("user") === "yes" && !localStorage.getItem(bonusKey)){
-  setTimeout(()=>{
-    document.getElementById("bonusPopup").classList.add("show");
-
-document.body.style.overflow = "hidden";
-document.body.style.height = "100vh";   // 🔥 lock mobile scroll
-document.body.style.touchAction = "none"; // 🔥 stop touch scroll  // 🔥 lock scroll
-  },800);
-}
-
-function claimBonus(){
-  let points = parseInt(localStorage.getItem("points_"+userEmail) || 0);
-
-  points += 100;
-
-  localStorage.setItem("points_"+userEmail, points);
-  localStorage.setItem(bonusKey, "yes");
-
-  document.getElementById("bonusPopup").classList.remove("show");
-
-document.body.style.overflow = "auto";
-document.body.style.height = "auto";
-document.body.style.touchAction = "auto";   // 🔥 unlock
-}  
-
+  
 if(!userEmail){
   userEmail = "guest"; // allow browsing without login
 }
@@ -725,14 +627,5 @@ updateMenu();
 </script>
 
 <!-- 🎁 SIGNUP BONUS POPUP -->
-<div id="bonusPopup" class="bonus-popup">
-  <div class="bonus-box">
-  <img src="./noti/noti1.jpg">
-
-  <!-- 🔥 BUTTON INSIDE IMAGE -->
-  <button class="claim-btn" onclick="claimBonus()">CLAIM</button>
-</div>
-</div>
-  
 </body>
 </html>
