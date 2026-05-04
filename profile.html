@@ -511,11 +511,12 @@ document.addEventListener("touchstart", e=>{
 
 // USER
 let acc=JSON.parse(localStorage.getItem("account"))||{};
+let userKey = acc.email || "guest";
 username.innerText=acc.username||"User";
 usernameInput.value=username.innerText;
 
 // PROFILE
-let p=JSON.parse(localStorage.getItem("profile"))||{};
+let p=JSON.parse(localStorage.getItem("profile_"+userKey))||{};
 
 // 🔥 DEFAULT IMAGES
 const defaultDP = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
@@ -539,17 +540,17 @@ if(p.banner){
 if(p.desc) desc.value = p.desc;
 
 // DATA
-let pointsVal=parseInt(localStorage.getItem("points")||0);
+let pointsVal=parseInt(localStorage.getItem("points_"+userKey)||0);
 points.innerText=pointsVal;
 
-let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+let orders=JSON.parse(localStorage.getItem("orders_"+userKey)||"[]");
 inventory.innerText=orders.length;
 
-let cartItems=JSON.parse(localStorage.getItem("cart")||"[]");
+let cartItems=JSON.parse(localStorage.getItem("cart_"+userKey)||"[]");
 cart.innerText=cartItems.length;
 
 window.addEventListener("storage",()=>{
-  let c = JSON.parse(localStorage.getItem("cart")||"[]");
+  let c = JSON.parse(localStorage.getItem("cart_"+userKey)||"[]");
   cart.innerText = c.length;
 });  
 
@@ -618,7 +619,7 @@ else{
 let myGrid = document.getElementById("myGames");
 
 // 🔥 GET USER PURCHASED GAMES
-let myGames = JSON.parse(localStorage.getItem("orders")||"[]");
+let myGames = JSON.parse(localStorage.getItem("orders_"+userKey)||"[]");
 
 if(myGames.length === 0){
   myGrid.innerHTML = "<p style='color:#888;'>No games purchased yet</p>";
@@ -667,7 +668,7 @@ function saveProfile(){
 let p=JSON.parse(localStorage.getItem("profile"))||{};
 p.desc=desc.value;
 p.name=usernameInput.value;
-localStorage.setItem("profile",JSON.stringify(p));
+localStorage.setItem("profile_"+userKey,JSON.stringify(p));
 location.reload();
 }
 
@@ -697,7 +698,7 @@ i.click();
 function saveImg(type,val){
 let p=JSON.parse(localStorage.getItem("profile"))||{};
 p[type]=val;
-localStorage.setItem("profile",JSON.stringify(p));
+localStorage.setItem("profile_"+userKey,JSON.stringify(p));
 }
 
 function logout(){
