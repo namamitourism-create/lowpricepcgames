@@ -225,7 +225,7 @@ function loadFeedback(){
   let list = document.getElementById("feedbackList");
   list.innerHTML = "";
 
-  let data = JSON.parse(localStorage.getItem("feedback_"+userEmail)) || [];
+  let data = JSON.parse(localStorage.getItem("feedback_all")) || [];
 
   data.forEach(item=>{
 
@@ -270,13 +270,13 @@ function postFeedback(){
 
   let data = JSON.parse(localStorage.getItem("feedback_all")) || [];
 
-  data.push({
-    name: username,
-    text: text,
-    time: new Date().toLocaleString()
-  });
+data.push({
+  name: username,
+  text: text,
+  time: new Date().toLocaleString()
+});
 
-  localStorage.setItem("feedback_all", JSON.stringify(data));
+localStorage.setItem("feedback_all", JSON.stringify(data));
 
   input.value = "";
 
