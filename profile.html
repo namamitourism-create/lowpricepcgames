@@ -624,21 +624,23 @@ if(myGames.length === 0){
   myGrid.innerHTML = "<p style='color:#888;'>No games purchased yet</p>";
 }else{
 
-myGames.forEach(g=>{
+  myGames.forEach(g=>{
 
-  let gameName = typeof g === "string" ? g : g.name;  // 🔥 FIX
+    let gameName = typeof g === "string" ? g : (g.name || g.title || "");
 
-  let div=document.createElement("div");
-  div.className="card";
+    let div=document.createElement("div");
+    div.className="card";
 
-  div.innerHTML=`
-  <img src="${getGameImage(gameName)}">
-  <div class="card-title">${gameName}</div>
-  `;
+    div.innerHTML=`
+    <img src="${getGameImage(gameName)}">
+    <div class="card-title">${gameName}</div>
+    `;
 
-  myGrid.appendChild(div);
+    myGrid.appendChild(div);
 
-});
+  });
+
+} // 🔥 IMPORTANT FIX (THIS WAS MISSING)
 
 // EDIT MODE
 let edit=false;
@@ -701,19 +703,6 @@ localStorage.setItem("profile",JSON.stringify(p));
 function logout(){
 localStorage.removeItem("user");
 location.href="index.html";
-}
-// 🔥 SCROLL TO SELECTED GAME
-let selected = localStorage.getItem("selectedGame");
-
-if(selected){
-  setTimeout(()=>{
-    document.querySelectorAll(".game").forEach(card=>{
-      if(card.querySelector("h3").innerText === selected){
-        card.scrollIntoView({behavior:"smooth", block:"center"});
-      }
-    });
-    localStorage.removeItem("selectedGame");
-  },500);
 }
 </script>
 
