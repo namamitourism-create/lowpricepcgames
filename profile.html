@@ -80,7 +80,12 @@ body{background:#060d1a;color:#fff;}
 }
 .dp img{width:100%;height:100%;object-fit:cover;}
 
-.dp-edit{bottom:5px;right:5px;}
+.dp-edit{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+}
 
 /* 🔥 MOBILE FIX (COPY FULL) */
 @media(max-width:768px){
@@ -201,6 +206,11 @@ body{background:#060d1a;color:#fff;}
 .icon{
   font-size:22px;
   color:#4ea1ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
 }
 
 .label{
@@ -260,7 +270,7 @@ body{background:#060d1a;color:#fff;}
 .desc-box[disabled]{background:transparent;border:none;}
 
 .edit-btn{
-  margin-top:10px;
+  margin-top:4px;
   margin-left:0;
   background:#4ea1ff;
   padding:10px 16px;
@@ -291,20 +301,25 @@ body{background:#060d1a;color:#fff;}
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:12px;
-  margin-top:25px;
+  margin-top:20px;
+  align-items:stretch;
 }
   
 .box{
   background:rgba(255,255,255,0.05);
   backdrop-filter:blur(10px);
 
-  padding:16px;
+  padding:16px 8px;
   border-radius:16px;
 
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+
+  text-align:center;
+
+  height:110px;   /* 🔥 SAME HEIGHT */
 
   gap:6px;
 
@@ -317,14 +332,16 @@ body{background:#060d1a;color:#fff;}
 }
 
 .label{
-  font-size:13px;
+  font-size:12px;
   color:#cbd5e1;
+  text-align:center;
 }
 
 .value{
   font-size:20px;
-  font-weight:bold;
-}
+  font-weight:700;
+  text-align:center;
+}  
   
 .section{margin-top:25px;}
 .grid{
@@ -392,7 +409,7 @@ body{background:#060d1a;color:#fff;}
 <div class="stats">
 
 <div class="box">
-  <div class="icon">⭐</div>
+  <div class="icon">★</div>
   <div class="label">LPPG Points</div>
   <div class="value" id="points">0</div>
 </div>
