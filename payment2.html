@@ -252,7 +252,13 @@ document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});
   
-let cart = JSON.parse(localStorage.getItem("checkoutCart")) || [];
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+let cart = JSON.parse(localStorage.getItem("checkoutCart_"+userEmail)) || [];
 let total = 0;
 
 cart.forEach(i=>{
@@ -291,7 +297,7 @@ function phoneError(){return document.getElementById("phoneError")}
 function processBtn(){return document.getElementById("processBtn")}
 
 function processOrder(){
-localStorage.setItem("billing",JSON.stringify({
+localStorage.setItem("billing_"+userEmail,JSON.stringify({
 name:nameField().value,
 email:emailField().value,
 phone:phoneField().value,
@@ -305,7 +311,7 @@ document.getElementById("paymentBox").classList.remove("hidden");
 function payUPI(){
 let upi="dj55alok-1@okhdfcbank";
 let id="LP"+Date.now();
-localStorage.setItem("orderID",id);
+localStorage.setItem("orderID_"+userEmail,id);
 
 window.location.href=`upi://pay?pa=${upi}&pn=Alook&am=${total}&cu=INR`;
 
@@ -342,11 +348,10 @@ document.getElementById("doneBtn").style.display="block";
 
 function completeOrder(){
 
-let b = JSON.parse(localStorage.getItem("billing"));
-let id = localStorage.getItem("orderID");
+let b = JSON.parse(localStorage.getItem("billing_"+userEmail));
+let id = localStorage.getItem("orderID_"+userEmail);
 
-// 🔥 SAVE PURCHASE (MAIN FIX)
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let orders = JSON.parse(localStorage.getItem("orders_"+userEmail)) || [];
 
 cart.forEach(item=>{
   orders.push({
@@ -360,12 +365,12 @@ cart.forEach(item=>{
   });
 });
 
-localStorage.setItem("orders", JSON.stringify(orders));
+localStorage.setItem("orders_"+userEmail, JSON.stringify(orders));
 
 // CLEAR CART + TEMP DATA
-localStorage.removeItem("checkoutCart");
-localStorage.removeItem("cart");     // 🔥 THIS FIX
-localStorage.removeItem("orderID");
+localStorage.removeItem("checkoutCart_"+userEmail);
+localStorage.removeItem("cart_"+userEmail);
+localStorage.removeItem("orderID_"+userEmail);
   
 // 🔥 WHATSAPP (UNCHANGED)
 let items="";
