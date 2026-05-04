@@ -126,7 +126,14 @@ body{
 
 document.addEventListener("contextmenu",e=>e.preventDefault());
 
-document.getElementById("points").innerText = localStorage.getItem("points")||0;
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+document.getElementById("points").innerText =
+localStorage.getItem("points_"+userEmail) || 0;
 
 // 🔥 FULL GAME LIST (ALL 129)
 const games = [
@@ -176,7 +183,7 @@ const highPopular = [
 ];
 
 // 🔥 PRICE MAP
-let priceMap = JSON.parse(localStorage.getItem("priceMap")) || {};
+let priceMap = JSON.parse(localStorage.getItem("priceMap_"+userEmail)) || {};
 
 function getPrice(name){
 
@@ -195,7 +202,7 @@ function getPrice(name){
   }
 
   priceMap[name]=price;
-  localStorage.setItem("priceMap",JSON.stringify(priceMap));
+  localStorage.setItem("priceMap_"+userEmail,JSON.stringify(priceMap));
 
   return price;
 }
@@ -228,7 +235,7 @@ sequence.forEach(num=>{
 });
 
 function claim(name){
-  localStorage.setItem("claimGame",name);
+  localStorage.setItem("claimGame_"+userEmail,name);
   location.href="claim.html";
 }
 
