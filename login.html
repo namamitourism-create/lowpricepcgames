@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Create Account</title>
+<title>Sign In</title>
 
 <style>
 
@@ -32,7 +32,7 @@ input{
 /* disable double tap zoom */
 html, body{
   touch-action:manipulation;
-}
+}  
   
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
 
@@ -41,45 +41,61 @@ body{
   color:#fff;
 
   height:100vh;
-  overflow:hidden;
+  overflow:hidden; /* 🔒 no scroll */
 
   display:flex;
   justify-content:center;
-  align-items:flex-start;
 
-  padding-top:5vh; /* 🔥 moved higher */
+  align-items:flex-start; /* move up */
+  padding-top:12vh; /* 👈 control position */
 }
 
 /* WRAPPER */
 .wrapper{
   width:420px;
-  max-width:92%;
+  max-width:92%; /* 👈 fit mobile */
 }
-
-/* 👇 PASTE HERE (LAST LINE) */
 html, body{
   overflow:hidden;
-}
-
+}  
 /* BRAND */
-.brand{text-align:center;margin-bottom:25px;}
-.brand h1{color:#4ea1ff;font-size:22px;font-weight:700;}
-.brand p{color:#9ca3af;font-size:13px;}
+.brand{
+  text-align:center;
+  margin-bottom:30px;
+}
+.brand h1{
+  color:#4ea1ff;
+  font-size:20px;
+  font-weight:700;
+}
+.brand p{
+  color:#9ca3af;
+  font-size:12px;
+}
 
 /* CARD */
 .card{
-  background:#111a2e;
+  background:rgba(17,26,46,0.85);
+  backdrop-filter:blur(14px);
   border-radius:16px;
-  padding:30px;
-  border:1px solid rgba(255,255,255,0.06);
-  box-shadow:0 30px 80px rgba(0,0,0,0.8);
+  padding:28px;
+  border:1px solid rgba(255,255,255,0.05);
+  box-shadow:0 30px 70px rgba(0,0,0,0.7);
 }
 
 /* TITLE */
-.title{font-size:18px;font-weight:600;margin-bottom:20px;}
+.title{
+  font-size:17px;
+  font-weight:600;
+  margin-bottom:20px;
+}
 
 /* LABEL */
-.label{font-size:12px;color:#9ca3af;margin-bottom:6px;}
+.label{
+  font-size:12px;
+  color:#9ca3af;
+  margin-bottom:5px;
+}
 
 /* INPUT */
 .input{
@@ -93,61 +109,32 @@ html, body{
   transition:0.2s;
 }
 
-/* 🔥 FIXED ERROR STYLE (STRONGER) */
-.input.error{
-  border:1px solid #ff3b3b !important;
-  box-shadow:0 0 0 2px rgba(255,59,59,0.3) !important;
-}
-
-/* FOCUS */
 .input:focus{
   border-color:#4ea1ff;
   box-shadow:0 0 0 2px rgba(78,161,255,0.2);
   outline:none;
 }
 
-/* HELPER */
-.helper{
-  font-size:11px;
-  color:#9ca3af;
-  margin-top:-10px;
-  margin-bottom:12px;
-}
-.helper.error{color:#ff3b3b;}
-
-/* CAPTCHA */
-.captcha-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
-
-.captcha{
-  background:#0f172a;
-  padding:10px 14px;
-  border-radius:8px;
-  font-weight:700;
-  letter-spacing:2px;
-  color:#ffd54f;
-}
-
-.refresh{font-size:12px;color:#4ea1ff;cursor:pointer;}
-
 /* BUTTON */
 .btn{
   width:100%;
-  padding:13px;
+  padding:12px;
   border:none;
   border-radius:10px;
   background:linear-gradient(135deg,#4ea1ff,#2563eb);
   color:#fff;
   font-weight:600;
   cursor:pointer;
+  transition:0.2s;
 }
 
-/* ERROR TEXT */
-.error-msg{
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(78,161,255,0.3);
+}
+
+/* ERROR */
+.error{
   color:#ff3b3b;
   font-size:12px;
   margin-bottom:10px;
@@ -155,9 +142,17 @@ html, body{
 }
 
 /* FOOT */
-.footer{text-align:center;font-size:12px;margin-top:18px;color:#9ca3af;}
-.footer a{color:#4ea1ff;text-decoration:none;}
+.footer{
+  text-align:center;
+  font-size:12px;
+  margin-top:18px;
+  color:#9ca3af;
+}
 
+.footer a{
+  color:#4ea1ff;
+  text-decoration:none;
+}
 </style>
 </head>
 
@@ -167,42 +162,25 @@ html, body{
 
 <div class="brand">
   <h1>LOW PRICE PC GAMES</h1>
-  <p>Create your secure account</p>
+  <p>Secure access to your account</p>
 </div>
 
 <div class="card">
 
-<div class="title">Create Account</div>
+<div class="title">Sign in</div>
 
-<div class="error-msg" id="error"></div>
-
-<div class="label">Username</div>
-<input type="text" id="username" class="input">
+<div class="error" id="error"></div>
 
 <div class="label">Email</div>
-<input type="email" id="email" class="input" onblur="validateEmail()">
-<div class="helper" id="emailHelp">Use a valid Gmail address</div>
+<input type="email" id="email" class="input">
 
 <div class="label">Password</div>
-<input type="password" id="password" class="input" oninput="validatePassword()">
-<div class="helper" id="passHelp">
-  6–18 characters, 1 capital letter, 1 number or special character
-</div>
+<input type="password" id="password" class="input">
 
-<div class="label">Confirm Password</div>
-<input type="password" id="confirm" class="input">
-
-<div class="captcha-row">
-  <div class="captcha" id="cap"></div>
-  <div class="refresh" onclick="gen()">Refresh</div>
-</div>
-
-<input type="text" id="capInput" class="input" placeholder="Enter CAPTCHA">
-
-<button class="btn" onclick="signup()">Create Account</button>
+<button class="btn" onclick="login()">Sign In</button>
 
 <div class="footer">
-  Already have an account? <a href="signin.html">Sign in</a>
+  Don’t have an account? <a href="signup.html">Sign up now</a>
 </div>
 
 </div>
@@ -228,82 +206,32 @@ document.addEventListener("touchend", e=>{
     e.preventDefault();
   }
   lastTouch=now;
-},false);
+},false);  
   
-let captcha="";
+function login(){
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("password").value.trim();
 
-function gen(){
-  captcha=Math.random().toString(36).substring(2,7).toUpperCase();
-  document.getElementById("cap").innerText=captcha;
-}
-gen();
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
-/* EMAIL VALIDATION */
-function validateEmail(){
-  let email=document.getElementById("email");
-  let help=document.getElementById("emailHelp");
-
-  if(!email.value || !email.value.endsWith("@gmail.com")){
-    email.classList.add("error");
-    help.classList.add("error");
-    return false;
-  }
-
-  email.classList.remove("error");
-  help.classList.remove("error");
-  return true;
-}
-
-/* PASSWORD VALIDATION */
-function validatePassword(){
-  let pass=document.getElementById("password");
-  let help=document.getElementById("passHelp");
-
-  let regex=/^(?=.*[A-Z])(?=.*[\d\W]).{6,18}$/;
-
-  if(!regex.test(pass.value)){
-    pass.classList.add("error");
-    help.classList.add("error");
-    return false;
-  }
-
-  pass.classList.remove("error");
-  help.classList.remove("error");
-  return true;
-}
-
-/* SIGNUP */
-function signup(){
-  let u=document.getElementById("username").value.trim();
-  let e=document.getElementById("email").value.trim();
-  let p=document.getElementById("password").value.trim();
-  let c=document.getElementById("confirm").value.trim();
-  let capI=document.getElementById("capInput").value.trim();
-
-  if(!u||!e||!p||!c||!capI){
+  if(!email || !pass){
     return showError("Fill all fields");
   }
 
-  if(!validateEmail() || !validatePassword()){
-    return showError("Fix errors before continuing");
+  // 🔍 find matching user
+  let foundUser = users.find(u => u.email === email);
+
+  if(!foundUser){
+    return showError("Account not found");
   }
 
-  if(p!==c){
-    return showError("Passwords do not match");
+  if(foundUser.password !== pass){
+    return showError("Wrong password");
   }
 
-  if(capI!==captcha){
-    gen();
-    return showError("Wrong CAPTCHA");
-  }
-
-  localStorage.setItem("account",JSON.stringify({
-    username:u,
-    email:e,
-    password:p
-  }));
-
+  // ✅ login success
   localStorage.setItem("user","yes");
+  localStorage.setItem("userEmail", email);
 
   window.location.href="index.html";
 }
@@ -313,7 +241,6 @@ function showError(msg){
   e.innerText=msg;
   e.style.display="block";
 }
-
 </script>
 
 </body>
