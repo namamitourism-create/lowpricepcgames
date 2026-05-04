@@ -15,11 +15,16 @@
   -webkit-user-select:none;
   user-select:none;
 }
-
+  
 img{
   pointer-events:none;
 }
 
+/* 🔥 ALLOW DP IMAGE */
+#dpImg{
+  pointer-events:auto;
+}
+  
 html,body{
   overflow-y:scroll;
   overflow-x:hidden;
@@ -719,25 +724,47 @@ location.reload();
 
 // IMAGE
 function uploadDP(){
-let i=document.createElement("input");
-i.type="file";
-i.onchange=e=>{
-let r=new FileReader();
-r.onload=()=>{dpImg.src=r.result;saveImg("dp",r.result);}
-r.readAsDataURL(e.target.files[0]);
-};
-i.click();
+  let i = document.createElement("input");
+  i.type = "file";
+  i.accept = "image/*";
+
+  i.onchange = e => {
+    let file = e.target.files[0];
+    if(!file) return;
+
+    let r = new FileReader();
+
+    r.onload = () => {
+      dpImg.src = r.result;
+      saveImg("dp", r.result);
+    };
+
+    r.readAsDataURL(file);
+  };
+
+  i.click();
 }
 
 function uploadBanner(){
-let i=document.createElement("input");
-i.type="file";
-i.onchange=e=>{
-let r=new FileReader();
-r.onload=()=>{banner.style.backgroundImage=`url(${r.result})`;saveImg("banner",r.result);}
-r.readAsDataURL(e.target.files[0]);
-};
-i.click();
+  let i = document.createElement("input");
+  i.type = "file";
+  i.accept = "image/*";
+
+  i.onchange = e => {
+    let file = e.target.files[0];
+    if(!file) return;
+
+    let r = new FileReader();
+
+    r.onload = () => {
+      banner.style.backgroundImage = `url(${r.result})`;
+      saveImg("banner", r.result);
+    };
+
+    r.readAsDataURL(file);
+  };
+
+  i.click();
 }
 
 function saveImg(type,val){
