@@ -521,7 +521,7 @@ if(!userEmail){
 let userKey = userEmail;
 
 // 🔥 LOAD PROFILE (ONLY ONCE)
-let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+let profileData = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
 
 // default username from email
 let defaultName = userEmail.split("@")[0];
@@ -689,12 +689,10 @@ document.querySelector(".edit-btn").style.display = edit ? "none" : "block";
 // SAVE
 function saveProfile(){
 
-let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+profileData.desc = desc.value;
+profileData.name = usernameInput.value;
 
-p.desc = desc.value;
-p.name = usernameInput.value;
-
-localStorage.setItem("profile_"+userKey, JSON.stringify(p));
+localStorage.setItem("profile_"+userKey, JSON.stringify(profileData));
 
 location.reload();
 }
@@ -724,11 +722,9 @@ i.click();
 
 function saveImg(type,val){
 
-let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+profileData[type] = val;
 
-p[type] = val;
-
-localStorage.setItem("profile_"+userKey, JSON.stringify(p));
+localStorage.setItem("profile_"+userKey, JSON.stringify(profileData));
 }
   
 function logout(){
