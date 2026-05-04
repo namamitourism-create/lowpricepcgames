@@ -522,12 +522,17 @@ let userKey = userEmail;
 
 // 🔥 LOAD PROFILE (ONLY ONCE)
 let profileData = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+let username = document.getElementById("username");
+let usernameInput = document.getElementById("usernameInput");
+let dpImg = document.getElementById("dpImg");
+let banner = document.getElementById("banner");
+let desc = document.getElementById("desc");
 
 // default username from email
 let defaultName = userEmail.split("@")[0];
 
 // final username
-let finalName = p.name || defaultName;
+let finalName = profileData.name || defaultName;
 
 // apply to UI
 username.innerText = finalName;
@@ -538,26 +543,26 @@ const defaultDP = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
 const defaultBanner = "linear-gradient(135deg,#2c2c2c,#1a1a1a)";
 
 // PROFILE PIC
-if(p.dp){
-  dpImg.src = p.dp;
+if(profileData.dp){
+  dpImg.src = profileData.dp;
 }else{
   dpImg.src = defaultDP;
 }
 
 // BANNER
-if(p.banner){
-  banner.style.backgroundImage = `url(${p.banner})`;
+if(profileData.banner){
+  banner.style.backgroundImage = `url(${profileData.banner})`;
 }else{
-  banner.style.background = defaultBanner;
+  banner.style.backgroundImage = defaultBanner;
 }
 
 // DESCRIPTION
-if(p.desc) desc.value = p.desc;
-if(p.name){
-  username.innerText = p.name;
-  usernameInput.value = p.name;
-}
+if(profileData.desc) desc.value = profileData.desc;
 
+if(profileData.name){
+  username.innerText = profileData.name;
+  usernameInput.value = profileData.name;
+}
 // DATA
 let pointsVal=parseInt(localStorage.getItem("points_"+userKey)||0);
 points.innerText=pointsVal;
