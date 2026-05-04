@@ -659,16 +659,24 @@ bannerEdit.style.display=edit?"flex":"none";
 
 closeBtn.style.display=edit?"flex":"none";
 saveBtn.style.display=edit?"flex":"none";
-  
+
 homeBtn.style.display = edit ? "none" : "flex";
+
+/* 🔥 ADD THIS LINE */
+document.querySelector(".edit-btn").style.display = edit ? "none" : "block";
+
 }
 
 // SAVE
 function saveProfile(){
-let p=JSON.parse(localStorage.getItem("profile"))||{};
-p.desc=desc.value;
-p.name=usernameInput.value;
-localStorage.setItem("profile_"+userKey,JSON.stringify(p));
+
+let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+
+p.desc = desc.value;
+p.name = usernameInput.value;
+
+localStorage.setItem("profile_"+userKey, JSON.stringify(p));
+
 location.reload();
 }
 
@@ -696,11 +704,14 @@ i.click();
 }
 
 function saveImg(type,val){
-let p=JSON.parse(localStorage.getItem("profile"))||{};
-p[type]=val;
-localStorage.setItem("profile_"+userKey,JSON.stringify(p));
-}
 
+let p = JSON.parse(localStorage.getItem("profile_"+userKey)) || {};
+
+p[type] = val;
+
+localStorage.setItem("profile_"+userKey, JSON.stringify(p));
+}
+  
 function logout(){
 localStorage.removeItem("user");
 location.href="index.html";
