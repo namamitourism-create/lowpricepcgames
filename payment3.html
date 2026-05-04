@@ -207,7 +207,13 @@ Payment Completed
 
 <script>
 
-let order = JSON.parse(localStorage.getItem("order"));
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+let order = JSON.parse(localStorage.getItem("order_"+userEmail));
 
 document.getElementById("title").innerText = order.name;
 document.getElementById("price").innerText = "Total ₹"+order.price;
@@ -243,7 +249,7 @@ document.getElementById("paymentBox").classList.remove("hidden");
 function pay(){
 let upi="dj55alok-1@okhdfcbank";
 let id="LP"+Date.now();
-localStorage.setItem("orderID",id);
+localStorage.setItem("orderID_"+userEmail,id);
 
 window.location.href=`upi://pay?pa=${upi}&pn=Alook&am=${order.price}&cu=INR`;
 
@@ -263,7 +269,8 @@ document.getElementById("doneBtn").style.display="block";
 
 function completeOrder(){
 
-let id = localStorage.getItem("orderID");
+let id = localStorage.getItem("orderID_"+userEmail);
+let orders = JSON.parse(localStorage.getItem("orders_"+userEmail)) || [];
 
 let name=document.getElementById("name").value;
 let email=document.getElementById("email").value;
@@ -272,8 +279,6 @@ let address=document.getElementById("address").value;
 let txn=document.getElementById("txn").value;
 
 // 🔥 SAVE PURCHASE (MAIN FIX)
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-
 orders.push({
   name: order.name,
   price: order.price,
@@ -284,11 +289,11 @@ orders.push({
   txn: txn
 });
 
-localStorage.setItem("orders", JSON.stringify(orders));
-
+localStorage.setItem("orders_"+userEmail, JSON.stringify(orders));
+  
 // CLEAR TEMP DATA
-localStorage.removeItem("order");
-localStorage.removeItem("orderID");
+localStorage.removeItem("order_"+userEmail);
+localStorage.removeItem("orderID_"+userEmail);
 
 // 🔥 WHATSAPP (UNCHANGED)
 let msg=`Hello Low Price PC Games,
