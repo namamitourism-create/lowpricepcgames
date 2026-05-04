@@ -208,7 +208,15 @@ document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});  
   
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  alert("Please login first");
+  window.location.href = "login.html";
+}
+
+let cartKey = "cart_" + userEmail;
+let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
 function renderCart(){
   let list=document.getElementById("cartList");
@@ -258,21 +266,20 @@ function renderCart(){
 function changeQty(i,change){
   cart[i].qty += change;
   if(cart[i].qty<=0){cart.splice(i,1);}
-  localStorage.setItem("cart",JSON.stringify(cart));
+  localStorage.setItem(cartKey, JSON.stringify(cart));
   renderCart();
 }
 
 function removeItem(i){
   cart.splice(i,1);
-  localStorage.setItem("cart",JSON.stringify(cart));
+  localStorage.setItem(cartKey, JSON.stringify(cart));
   renderCart();
 }
 
 function checkout(){
-  localStorage.setItem("checkoutCart",JSON.stringify(cart));
+  localStorage.setItem("checkoutCart_"+userEmail, JSON.stringify(cart));
   window.location.href="payment2.html";
 }
-
 renderCart();
 
 </script>
