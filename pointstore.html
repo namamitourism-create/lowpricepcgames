@@ -6,6 +6,29 @@
 <title>LPPG Point Store</title>
 
 <style>
+
+.popup{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(90deg,#ff4d4d,#ff7b7b);
+  color:#fff;
+  padding:12px 20px;
+  border-radius:10px;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.4s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  z-index:9999;
+}
+
+.popup.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+  
 *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
 img{pointer-events:none;}
 
@@ -229,6 +252,8 @@ setInterval(()=>{
     },1000);
   }
 },6000);
+
+<div id="popup" class="popup">Not enough LPPG points</div>
   
 // 🔥 FULL GAME LIST (ALL 129)
 const games = [
@@ -330,9 +355,30 @@ sequence.forEach(num=>{
 });
 
 function claim(name){
+
+  let userPoints = parseInt(localStorage.getItem("points_"+userEmail) || 0);
+  let price = priceMap[name] || 0;
+
+  if(userPoints < price){
+    showPopup("Not enough LPPG points");
+    return;
+  }
+
+  // ✅ enough points → proceed
   localStorage.setItem("claimGame_"+userEmail,name);
   location.href="claim.html";
 }
+
+function showPopup(text){
+  let popup = document.getElementById("popup");
+  popup.innerText = text;
+
+  popup.classList.add("show");
+
+  setTimeout(()=>{
+    popup.classList.remove("show");
+  },1500);
+}  
 
 </script>
 
