@@ -231,6 +231,7 @@ nav a:hover{color:#fff;}
 <script>
 
 document.addEventListener("contextmenu", e => e.preventDefault());
+let userEmail = localStorage.getItem("userEmail");
 document.addEventListener("touchstart", e => {
   if(e.touches.length > 1) e.preventDefault();
 }, {passive:false});  
