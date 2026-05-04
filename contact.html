@@ -268,7 +268,7 @@ function postFeedback(){
 
   let username = userEmail.split("@")[0];
 
-  let data = JSON.parse(localStorage.getItem(feedback_all)) || [];
+  let data = JSON.parse(localStorage.getItem("feedback_all")) || [];
 
   data.push({
     name: username,
@@ -276,7 +276,7 @@ function postFeedback(){
     time: new Date().toLocaleString()
   });
 
-  localStorage.setItem("feedback_"+userEmail, JSON.stringify(data));
+  localStorage.setItem("feedback_all", JSON.stringify(data));
 
   input.value = "";
 
@@ -290,7 +290,13 @@ loadFeedback();
   
 </script>
 
-<div id="feedbackBox" style="display:none;margin-top:20px;">
+<div id="feedbackBox" style="
+display:none;
+margin:20px 10px;
+padding:10px;
+background:#0b1220;
+border-radius:12px;
+">
 
 <textarea id="feedbackInput"
 placeholder="Write your feedback..."
