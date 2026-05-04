@@ -510,10 +510,19 @@ document.addEventListener("touchstart", e=>{
 },{passive:false});
 
 // USER
-let acc=JSON.parse(localStorage.getItem("account"))||{};
-let userKey = acc.email || "guest";
-username.innerText=acc.username||"User";
-usernameInput.value=username.innerText;
+let userEmail = localStorage.getItem("userEmail");
+
+if(!userEmail){
+  window.location.href = "signin.html";
+}
+
+let userKey = userEmail;
+
+// default name from email
+let defaultName = userEmail.split("@")[0];
+
+username.innerText = defaultName;
+usernameInput.value = defaultName;
 
 // PROFILE
 let p=JSON.parse(localStorage.getItem("profile_"+userKey))||{};
@@ -538,6 +547,10 @@ if(p.banner){
 
 // DESCRIPTION
 if(p.desc) desc.value = p.desc;
+if(p.name){
+  username.innerText = p.name;
+  usernameInput.value = p.name;
+}
 
 // DATA
 let pointsVal=parseInt(localStorage.getItem("points_"+userKey)||0);
@@ -714,6 +727,7 @@ localStorage.setItem("profile_"+userKey, JSON.stringify(p));
   
 function logout(){
 localStorage.removeItem("user");
+localStorage.removeItem("userEmail");
 location.href="index.html";
 }
 </script>
